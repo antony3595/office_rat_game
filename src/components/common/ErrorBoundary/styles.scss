@@ -1,0 +1,22 @@
+.error-block {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	height: 750px;
+	.icon-block {
+		image {
+			width: 170px;
+		}
+	}
+	.text-block {
+		text-align: center;
+		padding: 25px 0;
+		:nth-child(2) {
+			padding-top: 15px;
+		}
+	}
+	.link {
+		text-decoration: none;
+	}
+}
