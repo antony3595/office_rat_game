@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/office_rat_game/static/css/main.9c1a0a72.css",
-    "main.js": "/office_rat_game/static/js/main.1a091f36.js",
+    "main.css": "/office_rat_game/static/css/main.f068f53b.css",
+    "main.js": "/office_rat_game/static/js/main.d4276590.js",
     "static/js/453.14704c58.chunk.js": "/office_rat_game/static/js/453.14704c58.chunk.js",
     "index.html": "/office_rat_game/index.html",
-    "main.9c1a0a72.css.map": "/office_rat_game/static/css/main.9c1a0a72.css.map",
-    "main.1a091f36.js.map": "/office_rat_game/static/js/main.1a091f36.js.map",
+    "main.f068f53b.css.map": "/office_rat_game/static/css/main.f068f53b.css.map",
+    "main.d4276590.js.map": "/office_rat_game/static/js/main.d4276590.js.map",
     "453.14704c58.chunk.js.map": "/office_rat_game/static/js/453.14704c58.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9c1a0a72.css",
-    "static/js/main.1a091f36.js"
+    "static/css/main.f068f53b.css",
+    "static/js/main.d4276590.js"
   ]
 }
