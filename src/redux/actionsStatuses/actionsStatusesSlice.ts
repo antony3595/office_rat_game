@@ -3,10 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { addAsyncActionsCases } from "./loadingUtils";
 import { logout } from "../commonActions";
 import { RootState } from "../store";
-import { incrementAsync } from "../increment/incrementSlice";
+import {fetchCurrentUser, fetchToken} from "../auth/authSlice";
 
 const asyncActions = {
-	count: incrementAsync,
+	authorization: fetchToken,
+	currentUser: fetchCurrentUser,
 };
 
 export type ActionStatusKey = keyof typeof asyncActions;
@@ -16,7 +17,7 @@ export type ActionsStatusesState = {
 };
 
 export const initialState: ActionsStatusesState = (Object.keys(asyncActions) as ActionStatusKey[]).reduce(
-	(previousState: Partial<ActionsStatusesState>, key: string) => ({ ...previousState, [key]: StateStatus.INITIAL }),
+	(previousState: Partial<ActionsStatusesState>, key: ActionStatusKey) => ({ ...previousState, [key]: StateStatus.INITIAL }),
 	{}
 ) as ActionsStatusesState;
 

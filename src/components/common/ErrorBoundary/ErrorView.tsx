@@ -1,17 +1,21 @@
-import React from "react";
+import React, { JSX } from "react";
 import "./styles.scss";
 import * as urls from "../../../urls";
 import { Link } from "react-router-dom";
 
-const ErrorView: React.FC<{ message: string; text: string }> = ({ message, text }) => {
+const ErrorView: React.FC<{ message: JSX.Element | string; title: string; hideHomeLink?: boolean }> = ({
+	message,
+	title,
+	hideHomeLink = false,
+}) => {
 	return (
 		<div>
 			<div className="error-block">
 				<div className="text-block">
-					<h3>{text}</h3>
-					<p style={{ whiteSpace: "pre-wrap" }}>{message}</p>
+					<h3>{title}</h3>
+					{typeof message === "string" ? <p style={{ whiteSpace: "pre-wrap" }}>{message}</p> : message}
 				</div>
-				<Link to={urls.HOME}>{"strings.go_back_home"}</Link>
+				{!hideHomeLink && <Link to={urls.HOME}>{"strings.go_back_home"}</Link>}
 			</div>
 		</div>
 	);

@@ -7,6 +7,7 @@ const defaultConfig: Config = {
 	isProduction: () => process.env.REACT_APP_BUILD_TYPE === BuildType.PRODUCTION,
 	API_URL: "http://fakeapi.mock/",
 	localStorageKey: process.env.REACT_APP_LOCAL_STORAGE_KEY || "office_rat_storage",
+	tgBotLink: "https://t.me/desk_jockey_bot",
 };
 
 const buildTypeConfigs: BuildTypesScheme = {

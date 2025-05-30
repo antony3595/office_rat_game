@@ -1,12 +1,11 @@
 import { StateStatus } from "../types";
 import { ActionReducerMapBuilder, AsyncThunk } from "@reduxjs/toolkit";
 import { ActionsStatusesState } from "./actionsStatusesSlice";
-import {APIErrors} from "../actionsErrors/types";
 
 export const addAsyncActionsCases = (
 	builder: ActionReducerMapBuilder<ActionsStatusesState>,
 	key: keyof ActionsStatusesState,
-	asyncAction: AsyncThunk<any, any, { rejectValue: APIErrors; state?: any }>
+	asyncAction: AsyncThunk<any, any, { rejectValue: string; state?: any }>
 ) => {
 	builder
 		.addCase(asyncAction.pending, (state) => {

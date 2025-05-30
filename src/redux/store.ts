@@ -1,17 +1,17 @@
 import { Action, combineReducers, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import appReducer from "./app/appSlice";
 import actionsStatusesReducer from "./actionsStatuses/actionsStatusesSlice";
+import appReducer from "./app/appSlice";
+import authReducer from "./auth/authSlice";
 import actionsErrorsReducer from "./actionsErrors/actionsErrorsSlice";
 import { loadState, saveState } from "../utils/localStorageUtils";
-import incrementReducer from "./increment/incrementSlice";
 
 const persistedState = loadState();
 
 const rootReducer = combineReducers({
 	app: appReducer,
+	auth: authReducer,
 	statuses: actionsStatusesReducer,
 	errors: actionsErrorsReducer,
-	increment: incrementReducer,
 });
 
 export const store = configureStore({

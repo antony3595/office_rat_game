@@ -1,14 +1,12 @@
 import { ActionReducerMapBuilder, AsyncThunk } from "@reduxjs/toolkit";
 import { ActionsErrorsState } from "./actionsErrorsSlice";
-import {APIErrors} from "./types";
-import strings from "../../constants/strings";
 
-export const actionErrorsInitialState = { error: "", errors: null };
+export const actionErrorsInitialState = "";
 
 export const addAsyncActionsCases = (
 	builder: ActionReducerMapBuilder<ActionsErrorsState>,
 	key: keyof ActionsErrorsState,
-	asyncAction: AsyncThunk<any, any, { rejectValue: APIErrors; state?: any }>
+	asyncAction: AsyncThunk<any, any, { rejectValue: string; state?: any }>
 ) => {
 	builder
 		.addCase(asyncAction.pending, (state) => {
@@ -18,6 +16,6 @@ export const addAsyncActionsCases = (
 			state[key] = actionErrorsInitialState;
 		})
 		.addCase(asyncAction.rejected, (state, { payload }) => {
-			state[key] = payload || { error: strings.unknown_error, errors: null };
+			state[key] = payload || "";
 		});
 };

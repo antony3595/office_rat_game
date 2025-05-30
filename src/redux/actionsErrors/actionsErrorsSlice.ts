@@ -2,15 +2,16 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { actionErrorsInitialState, addAsyncActionsCases } from "./errorsUtils";
 import { logout } from "../commonActions";
 import { RootState } from "../store";
-import { APIErrors } from "./types";
-import { incrementAsync } from "../increment/incrementSlice";
+import { fetchCurrentUser, fetchToken } from "../auth/authSlice";
 
-const asyncActions = { increment: incrementAsync };
-
+const asyncActions = {
+	authorization: fetchToken,
+	currentUser: fetchCurrentUser,
+};
 export type ActionErrorKey = keyof typeof asyncActions;
 
 export type ActionsErrorsState = {
-	[K in ActionErrorKey]: APIErrors;
+	[K in ActionErrorKey]: string;
 };
 
 export const initialState: ActionsErrorsState = (Object.keys(asyncActions) as ActionErrorKey[]).reduce(
@@ -37,11 +38,6 @@ const actionsErrorsSlice = createSlice({
 export const { clearError } = actionsErrorsSlice.actions;
 
 export const errorsSelector = (state: RootState) => state.errors;
-
-export const createFormErrorsSelector =
-	<K extends ActionErrorKey>(key: K) =>
-	(state: RootState): ActionsErrorsState[K]["errors"] => {
-		return state.errors[key as ActionErrorKey].errors;
-	};
+export const createErrorSelector = (key: ActionErrorKey) => (state: RootState) => state.errors[key];
 
 export default actionsErrorsSlice.reducer;

@@ -22,6 +22,7 @@ export const saveState = (state: RootState) => {
 	try {
 		const storeForSave: Partial<RootState> = {
 			app: state.app,
+			auth: state.auth,
 		};
 		const serializedStore = JSON.stringify(storeForSave);
 		localStorage.setItem(config.localStorageKey, serializedStore);

@@ -3,7 +3,7 @@ import ErrorView from "./ErrorView";
 
 interface ErrorBoundaryProps {
 	children: ReactNode;
-	text: string;
+	title: string;
 }
 
 interface ErrorBoundaryState {
@@ -24,7 +24,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 	render() {
 		if (this.state.hasError) {
 			localStorage.clear();
-			return <ErrorView text={this.props.text} message={this.state.message} />;
+			return <ErrorView title={this.props.title} message={this.state.message} />;
 		}
 		return this.props.children;
 	}

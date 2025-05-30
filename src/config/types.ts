@@ -12,6 +12,7 @@ export interface Config {
 	isProduction: () => boolean;
 	API_URL: string;
 	localStorageKey: string;
+	tgBotLink: string;
 }
 
 interface OverridableConfig extends Partial<Config> {

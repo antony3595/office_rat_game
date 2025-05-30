@@ -3,11 +3,19 @@ import * as u from "../../urls";
 import React from "react";
 import TelegramHomeView from "../views/Home/TelegramHomeView";
 import PageNotFound from "../views/PageNotFound404/PageNotFound";
+import ErrorBoundary from "../common/ErrorBoundary/ErrorBoundary";
+import TelegramErrorBoundary from "../auth/telegram/TelegramErrorBoundary";
 
 export const routes: RouteObject[] = [
 	{
 		path: u.HOME,
-		element: <TelegramHomeView />,
+		element: (
+			<ErrorBoundary title={"ErrorBoundary"}>
+				<TelegramErrorBoundary>
+					<TelegramHomeView />
+				</TelegramErrorBoundary>
+			</ErrorBoundary>
+		),
 	},
 	{
 		path: "*",
