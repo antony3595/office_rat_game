@@ -3,7 +3,7 @@ import { loadState } from "../../utils/localStorageUtils";
 import { coreApi } from "../../api/api";
 
 export const updateAllAPIsTokens = (token: string) => {
-	coreApi.defaults.headers.common["Authorization"] = `Token ${token}`;
+	coreApi.defaults.headers.common["Authorization"] = `${token}`;
 };
 
 export const getStoredToken = (): string => {

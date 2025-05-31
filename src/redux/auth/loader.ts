@@ -5,6 +5,7 @@ import { fetchCurrentUser, fetchToken, selectAuth } from "./authSlice";
 import { createLoadingSelector, createStatusSelector } from "../actionsStatuses/actionsStatusesSlice";
 import { StateStatus } from "../types";
 import { AuthResponse } from "../../api/schema/auth";
+import { createErrorSelector } from "../actionsErrors/actionsErrorsSlice";
 
 export const useTelegramLogin = (tgDataString: string): [boolean, AuthResponse, () => void] => {
 	const dispatch = useAppDispatch();
@@ -12,6 +13,7 @@ export const useTelegramLogin = (tgDataString: string): [boolean, AuthResponse, 
 
 	const dataStatus = useAppSelector(createStatusSelector("authorization"));
 	const isDataFetching = useAppSelector(createLoadingSelector(["authorization"]));
+	const error = useAppSelector(createErrorSelector("authorization"));
 	const data = token;
 
 	const updateData = () => {
@@ -19,10 +21,10 @@ export const useTelegramLogin = (tgDataString: string): [boolean, AuthResponse, 
 	};
 
 	useEffect(() => {
-		if (!isDataFetching && loggedIn && (dataStatus === StateStatus.INITIAL || dataStatus === StateStatus.FAILED)) {
+		if (!isDataFetching && !loggedIn && (dataStatus === StateStatus.INITIAL || dataStatus === StateStatus.FAILED) && !error) {
 			updateData();
 		}
-	}, [dispatch, token, loggedIn]);
+	}, [dispatch, token, loggedIn, error]);
 
 	return [isDataFetching, data, updateData];
 };

@@ -2,11 +2,8 @@ import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { AuthResponse, TGAuthRequestBody } from "./schema/auth";
 import * as ep from "./endpoints";
 import { getStoredToken } from "../redux/utils/authUtils";
-import { store } from "../redux/store";
-import { logout } from "../redux/commonActions";
 import config from "../config/config";
-import {CurrentUser} from "./schema/users";
-import {CURRENT_USER} from "./endpoints";
+import { CurrentUser } from "./schema/users";
 
 const baseURL = config.API_URL;
 
@@ -21,7 +18,11 @@ coreApi.interceptors.response.use(
 	(response) => response,
 	(error) => {
 		if (axios.isAxiosError(error) && error.response?.status === 401) {
-			store.dispatch(logout());
+			import("../redux/commonActions").then(({ logout }) => {
+				import("../redux/store").then(({ store }) => {
+					store.dispatch(logout());
+				});
+			});
 		}
 		return Promise.reject(error);
 	}
@@ -32,5 +33,5 @@ export const getToken = (body: TGAuthRequestBody): Promise<AxiosResponse<AuthRes
 };
 
 export const getCurrentUser = (): Promise<AxiosResponse<CurrentUser>> => {
-	return coreApi.get<CurrentUser>(ep.CURRENT_USER, );
+	return coreApi.get<CurrentUser>(ep.CURRENT_USER);
 };
