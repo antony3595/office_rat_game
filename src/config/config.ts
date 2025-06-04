@@ -1,4 +1,4 @@
-import {type BuildType, BuildTypeEnum, type BuildTypesScheme, type Config} from "./types";
+import { type BuildType, BuildTypeEnum, type BuildTypesScheme, type Config } from "./types";
 
 const defaultConfig: Config = {
 	SITE_NAME: import.meta.env.REACT_APP_SITE_NAME || "Site Name",

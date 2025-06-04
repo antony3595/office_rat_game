@@ -1,4 +1,4 @@
-import { Component, JSX, ReactNode } from "react";
+import { Component, type JSX, type ReactNode } from "react";
 import strings from "../../../constants/strings";
 import config from "../../../config/config";
 import ErrorView from "../../common/ErrorBoundary/ErrorView";

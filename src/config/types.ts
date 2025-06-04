@@ -5,7 +5,7 @@ export const BuildTypeEnum: Record<string, BuildType> = {
 	DEVELOPMENT: "development",
 	LOCALHOST: "localhost",
 	MOCK: "mock",
-}
+};
 
 export interface Config {
 	SITE_NAME: string;

@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { fetchCurrentUser, fetchToken, selectAuth } from "./authSlice";
 import { StateStatus } from "../types";
 import type { AuthResponse } from "../../api/schema/auth";
-import {createLoadingSelector, createStatusSelector} from "../actionsStatuses/selectors.ts";
-import {createErrorSelector} from "../actionsErrors/selectors.ts";
+import { createLoadingSelector, createStatusSelector } from "../actionsStatuses/selectors.ts";
+import { createErrorSelector } from "../actionsErrors/selectors.ts";
 
 export const useTelegramLogin = (tgDataString: string): [boolean, AuthResponse, () => void] => {
 	const dispatch = useAppDispatch();

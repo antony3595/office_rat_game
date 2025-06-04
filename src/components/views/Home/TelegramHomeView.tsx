@@ -2,7 +2,7 @@ import { themeParams } from "@telegram-apps/sdk";
 import { useCurrentUserLoader } from "../../../redux/auth/loader";
 import { useAppSelector } from "../../../redux/hooks";
 
-import {createErrorSelector} from "../../../redux/actionsErrors/selectors.ts";
+import { createErrorSelector } from "../../../redux/actionsErrors/selectors.ts";
 
 const TelegramHomeView = () => {
 	const [isCurrentUserLoading, currentUser] = useCurrentUserLoader();

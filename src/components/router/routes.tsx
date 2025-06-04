@@ -1,4 +1,4 @@
-import {type RouteObject } from "react-router-dom";
+import { type RouteObject } from "react-router-dom";
 import * as u from "../../urls";
 import TelegramHomeView from "../views/Home/TelegramHomeView";
 import PageNotFound from "../views/PageNotFound404/PageNotFound";

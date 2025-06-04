@@ -1,4 +1,4 @@
-import React, { JSX } from "react";
+import React, { type JSX } from "react";
 import "./styles.scss";
 import * as urls from "../../../urls";
 import { Link } from "react-router-dom";
