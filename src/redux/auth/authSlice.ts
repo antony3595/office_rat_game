@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCurrentUser, getToken } from "../../api/api";
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { logout } from "../commonActions";
-import { CurrentUser } from "../../api/schema/users";
+import type { CurrentUser } from "../../api/schema/users";
 
 import { updateAllAPIsTokens } from "../utils/authUtils";
-import { AuthResponse, TGAuthRequestBody } from "../../api/schema/auth";
-import { AuthState } from "./schema";
-import { AxiosResponse } from "axios";
+import type { AuthResponse, TGAuthRequestBody } from "../../api/schema/auth";
+import type { AuthState } from "./schema";
+import type { AxiosResponse } from "axios";
 import { getApiError } from "../../api/utils";
 
 const initialState: AuthState = {

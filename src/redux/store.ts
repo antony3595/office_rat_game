@@ -1,4 +1,4 @@
-import { Action, combineReducers, configureStore, ThunkAction } from "@reduxjs/toolkit";
+import { type Action, combineReducers, configureStore, type ThunkAction } from "@reduxjs/toolkit";
 import actionsStatusesReducer from "./actionsStatuses/actionsStatusesSlice";
 import appReducer from "./app/appSlice";
 import authReducer from "./auth/authSlice";

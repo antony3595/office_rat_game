@@ -2,7 +2,8 @@ import React, { JSX } from "react";
 import { useAppSelector } from "../../../redux/hooks";
 import { selectAuth } from "../../../redux/auth/authSlice";
 import { useTelegramLogin } from "../../../redux/auth/loader";
-import { createErrorSelector } from "../../../redux/actionsErrors/actionsErrorsSlice";
+
+import {createErrorSelector} from "../../../redux/actionsErrors/selectors.ts";
 
 export type ProtectedRouteProps = {
 	outlet: JSX.Element;

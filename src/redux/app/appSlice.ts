@@ -1,5 +1,5 @@
-import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
+import { createAction, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { type RootState } from "../store";
 import config from "../../config/config";
 
 export interface AppState {

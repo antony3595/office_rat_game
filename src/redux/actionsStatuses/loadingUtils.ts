@@ -1,6 +1,6 @@
 import { StateStatus } from "../types";
-import { ActionReducerMapBuilder, AsyncThunk } from "@reduxjs/toolkit";
-import { ActionsStatusesState } from "./actionsStatusesSlice";
+import { type ActionReducerMapBuilder,  type AsyncThunk } from "@reduxjs/toolkit";
+import { type ActionsStatusesState } from "./actionsStatusesSlice";
 
 export const addAsyncActionsCases = (
 	builder: ActionReducerMapBuilder<ActionsStatusesState>,

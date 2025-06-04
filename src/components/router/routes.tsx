@@ -1,6 +1,5 @@
-import { RouteObject } from "react-router-dom";
+import {type RouteObject } from "react-router-dom";
 import * as u from "../../urls";
-import React from "react";
 import TelegramHomeView from "../views/Home/TelegramHomeView";
 import PageNotFound from "../views/PageNotFound404/PageNotFound";
 import ErrorBoundary from "../common/ErrorBoundary/ErrorBoundary";

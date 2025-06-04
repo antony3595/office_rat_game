@@ -1,4 +1,4 @@
-import { RootState } from "../store";
+import type { RootState } from "../store";
 import { loadState } from "../../utils/localStorageUtils";
 import { coreApi } from "../../api/api";
 

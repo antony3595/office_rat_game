@@ -2,8 +2,7 @@ import { StateStatus } from "../types";
 import { createSlice } from "@reduxjs/toolkit";
 import { addAsyncActionsCases } from "./loadingUtils";
 import { logout } from "../commonActions";
-import { RootState } from "../store";
-import {fetchCurrentUser, fetchToken} from "../auth/authSlice";
+import { fetchCurrentUser, fetchToken } from "../auth/authSlice";
 
 const asyncActions = {
 	authorization: fetchToken,
@@ -32,13 +31,5 @@ const actionsStatusesSlice = createSlice({
 		});
 	},
 });
-
-export const createLoadingSelector = (keys: ActionStatusKey[]) => (state: RootState) => {
-	return keys.some((key) => state.statuses[key as ActionStatusKey] === StateStatus.LOADING);
-};
-
-export const createStatusSelector = (key: ActionStatusKey) => (state: RootState) => {
-	return state.statuses[key as ActionStatusKey];
-};
 
 export default actionsStatusesSlice.reducer;

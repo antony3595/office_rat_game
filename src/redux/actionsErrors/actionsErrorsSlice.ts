@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { actionErrorsInitialState, addAsyncActionsCases } from "./errorsUtils";
 import { logout } from "../commonActions";
-import { RootState } from "../store";
 import { fetchCurrentUser, fetchToken } from "../auth/authSlice";
 
 const asyncActions = {
@@ -36,8 +35,5 @@ const actionsErrorsSlice = createSlice({
 });
 
 export const { clearError } = actionsErrorsSlice.actions;
-
-export const errorsSelector = (state: RootState) => state.errors;
-export const createErrorSelector = (key: ActionErrorKey) => (state: RootState) => state.errors[key];
 
 export default actionsErrorsSlice.reducer;

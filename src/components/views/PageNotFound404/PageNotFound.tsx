@@ -1,4 +1,3 @@
-import React from "react";
 import "./page_not_found.scss";
 import strings from "../../../constants/strings";
 

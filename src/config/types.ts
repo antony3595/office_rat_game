@@ -1,15 +1,16 @@
-export enum BuildType {
-	PRODUCTION = "production",
-	DEVELOPMENT = "development",
-	LOCALHOST = "localhost",
-	MOCK = "mock",
+export type BuildType = "production" | "development" | "localhost" | "mock";
+
+export const BuildTypeEnum: Record<string, BuildType> = {
+	PRODUCTION: "production",
+	DEVELOPMENT: "development",
+	LOCALHOST: "localhost",
+	MOCK: "mock",
 }
 
 export interface Config {
 	SITE_NAME: string;
 	BUILD_TYPE: BuildType;
 	stateVersion: number;
-	isProduction: () => boolean;
 	API_URL: string;
 	localStorageKey: string;
 	tgBotLink: string;

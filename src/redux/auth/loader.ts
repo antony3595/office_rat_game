@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { CurrentUser } from "../../api/schema/users";
+import type { CurrentUser } from "../../api/schema/users";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { fetchCurrentUser, fetchToken, selectAuth } from "./authSlice";
-import { createLoadingSelector, createStatusSelector } from "../actionsStatuses/actionsStatusesSlice";
 import { StateStatus } from "../types";
-import { AuthResponse } from "../../api/schema/auth";
-import { createErrorSelector } from "../actionsErrors/actionsErrorsSlice";
+import type { AuthResponse } from "../../api/schema/auth";
+import {createLoadingSelector, createStatusSelector} from "../actionsStatuses/selectors.ts";
+import {createErrorSelector} from "../actionsErrors/selectors.ts";
 
 export const useTelegramLogin = (tgDataString: string): [boolean, AuthResponse, () => void] => {
 	const dispatch = useAppDispatch();

@@ -1,9 +1,9 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { AuthResponse, TGAuthRequestBody } from "./schema/auth";
+import axios, { type AxiosInstance, type AxiosResponse } from "axios";
+import { type AuthResponse, type TGAuthRequestBody } from "./schema/auth";
 import * as ep from "./endpoints";
 import { getStoredToken } from "../redux/utils/authUtils";
 import config from "../config/config";
-import { CurrentUser } from "./schema/users";
+import { type CurrentUser } from "./schema/users";
 
 const baseURL = config.API_URL;
 

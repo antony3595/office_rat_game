@@ -1,4 +1,4 @@
-import { RootState } from "../redux/store";
+import type { RootState } from "../redux/store";
 import config from "../config/config";
 
 export const loadState = () => {
@@ -13,7 +13,7 @@ export const loadState = () => {
 			return undefined;
 		}
 		return state;
-	} catch (err) {
+	} catch (e) {
 		return undefined;
 	}
 };

@@ -1,5 +1,5 @@
-import { ActionReducerMapBuilder, AsyncThunk } from "@reduxjs/toolkit";
-import { ActionsErrorsState } from "./actionsErrorsSlice";
+import type { ActionReducerMapBuilder, AsyncThunk } from "@reduxjs/toolkit";
+import type { ActionsErrorsState } from "./actionsErrorsSlice";
 
 export const actionErrorsInitialState = "";
 
