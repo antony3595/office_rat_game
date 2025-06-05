@@ -1,12 +1,12 @@
-import "./App.css";
 import PageRouter from "./components/router/PageRouter";
+import "@/stylesheets/main.css";
 
-function App() {
+const App = () => {
 	return (
-		<div>
+		<div className="dark">
 			<PageRouter />
 		</div>
 	);
-}
+};
 
 export default App;

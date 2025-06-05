@@ -1,4 +1,4 @@
-import "./page_not_found.scss";
+import "./page_not_found.css";
 import strings from "../../../constants/strings";
 
 const PageNotFound = () => {
