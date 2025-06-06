@@ -15,9 +15,6 @@ export const getPercents = (partialValue: number, totalValue: number, decimalPla
 	return !isNaN(percents) ? percents.toFixed(decimalPlaces) : "0";
 };
 
-export const stripHtmlTags = (str: string): string => {
-	return str.replaceAll(/<\/?[^>]+(>|$)/gi, "").replaceAll("&nbsp;", "");
-};
 
 export const dotsSubstring = (str: string, start: number, end: number | undefined): string => {
 	const substring = str.substring(start, end);

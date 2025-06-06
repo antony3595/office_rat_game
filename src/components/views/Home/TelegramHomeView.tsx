@@ -1,33 +1,11 @@
-import { themeParams } from "@telegram-apps/sdk";
-import { useCurrentUserLoader } from "@/redux/auth/loader.ts";
-import { useAppSelector } from "@/redux/hooks.ts";
-
-import { createErrorSelector } from "@/redux/actionsErrors/selectors.ts";
+import Page from "@/components/views/Page.tsx";
+import UserGreeting from "@/components/views/Home/UserGreeting.tsx";
 
 const TelegramHomeView = () => {
-	const [isCurrentUserLoading, currentUser] = useCurrentUserLoader();
-	const error = useAppSelector(createErrorSelector("currentUser"));
-
 	return (
-		<div
-			className="App"
-			style={{
-				backgroundColor: themeParams?.backgroundColor(),
-				color: themeParams?.textColor(),
-			}}
-		>
-			<h1>Мое Telegram Web App (с Hooks)</h1>
-			{error && <p>{error}</p>}
-			{currentUser && (
-				<div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-					<div>{currentUser.id}</div>
-					<div>{currentUser.tg_id}</div>
-					<div>{currentUser.first_name}</div>
-					{currentUser.photo_url && <img src={currentUser.photo_url} alt="avatar" />}
-				</div>
-			)}
-			{isCurrentUserLoading && <p>Загрузка пользователя...</p>}
-		</div>
+		<Page>
+			<UserGreeting />
+		</Page>
 	);
 };
 

@@ -1,11 +1,14 @@
 import PageRouter from "./components/router/PageRouter";
 import "@/stylesheets/main.css";
+import { ThemeProvider } from "@/components/theming/ThemeProvider.tsx";
 
 const App = () => {
 	return (
-		<div className="dark">
-			<PageRouter />
-		</div>
+		<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+			<div>
+				<PageRouter />
+			</div>
+		</ThemeProvider>
 	);
 };
 

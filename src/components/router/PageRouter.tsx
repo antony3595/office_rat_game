@@ -6,7 +6,7 @@ const router = createBrowserRouter(routes, { basename: import.meta.env.BASE_URL 
 
 const PageRouter: React.FC = () => {
 	return (
-		<div className={"page"}>
+		<div>
 			<RouterProvider router={router} />
 		</div>
 	);

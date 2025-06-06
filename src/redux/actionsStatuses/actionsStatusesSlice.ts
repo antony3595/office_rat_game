@@ -1,4 +1,4 @@
-import { StateStatus } from "../types";
+import {StateStatus, type StateStatusType} from "../types";
 import { createSlice } from "@reduxjs/toolkit";
 import { addAsyncActionsCases } from "./loadingUtils";
 import { logout } from "../commonActions";
@@ -12,7 +12,7 @@ const asyncActions = {
 export type ActionStatusKey = keyof typeof asyncActions;
 
 export type ActionsStatusesState = {
-	[K in ActionStatusKey]: StateStatus;
+	[K in ActionStatusKey]: StateStatusType;
 };
 
 export const initialState: ActionsStatusesState = (Object.keys(asyncActions) as ActionStatusKey[]).reduce(
