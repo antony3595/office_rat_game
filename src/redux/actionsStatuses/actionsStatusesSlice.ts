@@ -1,12 +1,16 @@
-import {StateStatus, type StateStatusType} from "../types";
+import { StateStatus, type StateStatusType } from "../types";
 import { createSlice } from "@reduxjs/toolkit";
 import { addAsyncActionsCases } from "./loadingUtils";
 import { logout } from "../commonActions";
 import { fetchCurrentUser, fetchToken } from "../auth/authSlice";
+import {fetchActiveGameQuestion, fetchActiveJoinedGame, fetchJoinedGames} from "@/redux/game/gameSlice.ts";
 
 const asyncActions = {
 	authorization: fetchToken,
 	currentUser: fetchCurrentUser,
+	joinedGames: fetchJoinedGames,
+	activeJoinedGame: fetchActiveJoinedGame,
+	activeGameQuestion: fetchActiveGameQuestion,
 };
 
 export type ActionStatusKey = keyof typeof asyncActions;

@@ -5,6 +5,8 @@ import PageNotFound from "../views/PageNotFound404/PageNotFound";
 import ErrorBoundary from "../common/ErrorBoundary/ErrorBoundary";
 import TelegramErrorBoundary from "../auth/telegram/TelegramErrorBoundary";
 import TelegramAuth from "../auth/telegram/TelegramAuth";
+import UserGamesView from "@/components/views/UserGames/UserGamesView.tsx";
+import UserGameView from "@/components/views/UserGames/UserGameView.tsx";
 
 export const routes: RouteObject[] = [
 	{
@@ -13,6 +15,26 @@ export const routes: RouteObject[] = [
 			<ErrorBoundary title={"ErrorBoundary"}>
 				<TelegramErrorBoundary>
 					<TelegramAuth outlet={<TelegramHomeView />}></TelegramAuth>
+				</TelegramErrorBoundary>
+			</ErrorBoundary>
+		),
+	},
+	{
+		path: u.GAMES,
+		element: (
+			<ErrorBoundary title={"ErrorBoundary"}>
+				<TelegramErrorBoundary>
+					<TelegramAuth outlet={<UserGamesView />}></TelegramAuth>
+				</TelegramErrorBoundary>
+			</ErrorBoundary>
+		),
+	},
+	{
+		path: u.GAME,
+		element: (
+			<ErrorBoundary title={"ErrorBoundary"}>
+				<TelegramErrorBoundary>
+					<TelegramAuth outlet={<UserGameView />}></TelegramAuth>
 				</TelegramErrorBoundary>
 			</ErrorBoundary>
 		),

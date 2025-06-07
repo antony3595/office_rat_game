@@ -4,6 +4,7 @@ import * as ep from "./endpoints";
 import { getStoredToken } from "../redux/utils/authUtils";
 import config from "../config/config";
 import { type CurrentUser } from "./schema/users";
+import type { AnswerResponse, GameAnswerRequest, UserGame, UserGameQuestion } from "@/api/schema/game.ts";
 
 const baseURL = config.API_URL;
 
@@ -34,4 +35,20 @@ export const getToken = (body: TGAuthRequestBody): Promise<AxiosResponse<AuthRes
 
 export const getCurrentUser = (): Promise<AxiosResponse<CurrentUser>> => {
 	return coreApi.get<CurrentUser>(ep.CURRENT_USER);
+};
+
+export const getUserJoinedGames = (): Promise<AxiosResponse<UserGame[]>> => {
+	return coreApi.get<UserGame[]>(ep.USER_JOINED_GAMES);
+};
+export const getUserJoinedGame = (gameUuid: string): Promise<AxiosResponse<UserGame>> => {
+	return coreApi.get<UserGame>(ep.USER_JOINED_GAME.replace(":game_uuid", gameUuid));
+};
+
+export const getActiveGameQuestion = (gameUuid: string): Promise<AxiosResponse<UserGameQuestion>> => {
+	return coreApi.get<UserGameQuestion>(ep.ACTIVE_GAME_QUESTION.replace(":game_uuid", gameUuid));
+};
+
+export const sendAnswer = (gameUuid: string, answer: string): Promise<AxiosResponse<AnswerResponse>> => {
+	const body: GameAnswerRequest = { answer };
+	return coreApi.post<AnswerResponse>(ep.ANSWER_TO_QUESTION.replace(":game_uuid", gameUuid), body);
 };

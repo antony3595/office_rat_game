@@ -1,5 +1,6 @@
 import { type Action, combineReducers, configureStore, type ThunkAction } from "@reduxjs/toolkit";
 import actionsStatusesReducer from "./actionsStatuses/actionsStatusesSlice";
+import gamesReducer from "./game/gameSlice";
 import appReducer from "./app/appSlice";
 import authReducer from "./auth/authSlice";
 import actionsErrorsReducer from "./actionsErrors/actionsErrorsSlice";
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
 	auth: authReducer,
 	statuses: actionsStatusesReducer,
 	errors: actionsErrorsReducer,
+	games: gamesReducer,
 });
 
 export const store = configureStore({

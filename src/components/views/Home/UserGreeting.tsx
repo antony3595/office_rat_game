@@ -9,20 +9,24 @@ import { toast } from "sonner";
 import strings from "@/constants/strings.ts";
 import copyStringToClipboard from "@/utils/windowUtils.ts";
 import { Separator } from "@/components/ui/separator.tsx";
+import { useNavigate } from "react-router-dom";
+import { GAMES } from "@/urls.ts";
 
 const UserGreeting: React.FC = () => {
 	const [isCurrentUserLoading, currentUser] = useCurrentUserLoader();
 	const error = useAppSelector(createErrorSelector("currentUser"));
+	const navigate = useNavigate();
 
 	return (
 		<div>
-			{error && <p>{error}</p>}
-			<div className="flex justify-center">
+			<div className="flex justify-center flex-col items-center">
+				{error && <Typer timeout={1000} dataText={[strings.unknown_error]} />}
+
 				{!isCurrentUserLoading && currentUser && (
 					<div className="flex flex-col greeting_animation border p-3 rounded-md bg-muted max-w-xs min-w-xs">
 						<div className="text-xs mb-2">
 							<Button asChild>
-								<Typer timeout={1000} dataText={[currentUser.id.toString()]} permanent heading={"User id:"} />
+								<Typer timeout={1250} dataText={[currentUser.id.toString()]} permanent heading={"User id:"} />
 							</Button>
 						</div>
 						<div
@@ -35,18 +39,22 @@ const UserGreeting: React.FC = () => {
 							<Typer timeout={1000} dataText={[currentUser.tg_id.toString()]} permanent heading={"Telegram id:"} />
 						</div>
 						<Separator className={"my-2"}></Separator>
-						<div className="transform rounded-full overflow-hidden p-8">
-							{currentUser.photo_url && <img className={"rounded-full"} src={currentUser.photo_url} alt="avatar" />}
+						<div className="transform rounded-full overflow-hidden w-full border bg-background">
+							<img
+								className={"rounded-full"}
+								src={currentUser.photo_url || `https://api.dicebear.com/9.x/pixel-art/svg?seed=${currentUser.tg_id}`}
+								alt="avatar"
+							/>
 						</div>
 						<div className="text-center mt-2">
-							<Typer timeout={1000} dataText={[currentUser.first_name]} permanent heading={"Привет"} />
+							<Typer timeout={1250} dataText={[currentUser.first_name]} permanent heading={"Привет"} />
 						</div>
 						<Separator className={"my-2"}></Separator>
 						<div className="flex justify-end mt-2 ">
 							<Button
 								className={"animate-bounce"}
 								onClick={() => {
-									toast(strings.go_game);
+									navigate(GAMES);
 								}}
 							>
 								{strings.go_game}
@@ -61,7 +69,7 @@ const UserGreeting: React.FC = () => {
 					</div>
 				)}
 
-				{isCurrentUserLoading && <Typer dataText={["Загрузка пользователя..."]} permanent />}
+				{isCurrentUserLoading && <Typer dataText={[strings.user_loading_]} />}
 			</div>
 		</div>
 	);

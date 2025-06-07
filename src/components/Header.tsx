@@ -11,9 +11,8 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-	const [isCurrentUserLoading, currentUser] = useCurrentUserLoader();
+	const [, currentUser] = useCurrentUserLoader();
 	const navigate = useNavigate();
-	console.log(isCurrentUserLoading);
 	return (
 		<div className="min-h-full">
 			<nav className="bg-muted">

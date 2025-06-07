@@ -3,7 +3,7 @@ import UserGreeting from "@/components/views/Home/UserGreeting.tsx";
 
 const TelegramHomeView = () => {
 	return (
-		<Page>
+		<Page centrify>
 			<UserGreeting />
 		</Page>
 	);

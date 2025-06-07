@@ -1,9 +1,12 @@
-import type { JSX } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-import { selectAuth } from "../../../redux/auth/authSlice";
-import { useTelegramLogin } from "../../../redux/auth/loader";
+import { type JSX } from "react";
+import { useAppSelector } from "@/redux/hooks.ts";
+import { selectAuth } from "@/redux/auth/authSlice.ts";
+import { useTelegramLogin } from "@/redux/auth/loader.ts";
 
-import { createErrorSelector } from "../../../redux/actionsErrors/selectors.ts";
+import { createErrorSelector } from "@/redux/actionsErrors/selectors.ts";
+import Page from "@/components/views/Page.tsx";
+import Typer from "@/components/ui/Typer/typer.tsx";
+import strings from "@/constants/strings.ts";
 
 export type ProtectedRouteProps = {
 	outlet: JSX.Element;
@@ -19,14 +22,26 @@ const TelegramAuth = ({ outlet }: ProtectedRouteProps) => {
 	const { loggedIn } = useAppSelector(selectAuth);
 
 	if (isTokenLoading) {
-		return <div>Авторизация...</div>;
+		return (
+			<Page centrify>
+				<div className=" flex max-w-xs ">
+					<Typer dataText={[error]} heading={`${strings.auth_error}:`} />
+				</div>
+			</Page>
+		);
 	}
 
 	if (loggedIn) {
 		return outlet;
 	}
 	if (error) {
-		return <div>Ошибка авторизации: {error}</div>;
+		return (
+			<Page centrify>
+				<div className=" flex max-w-xs ">
+					<Typer dataText={[error]} heading={`${strings.auth_error}:`} />
+				</div>
+			</Page>
+		);
 	}
 	return null;
 };
