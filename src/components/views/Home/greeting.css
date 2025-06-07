@@ -1,0 +1,22 @@
+.greeting {
+}
+
+.greeting_animation {
+	animation: fadeInDown 1s cubic-bezier(.74,.89,.6,.94);
+	opacity: 1;
+}
+
+@keyframes fadeInDown {
+	from {
+		opacity: 0;
+		transform: translateX(1000px);
+	}
+	40% {
+		opacity: .5;
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}

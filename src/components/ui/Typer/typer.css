@@ -1,0 +1,31 @@
+.cursor {
+	display: inline-block;
+	background-color: var(--foreground);
+	animation: cursor-blink 800ms infinite;
+}
+
+.cursor-hidden {
+	background-color: transparent;
+	animation: cursor-hide 800ms ease-in !important;
+}
+
+@keyframes cursor-blink {
+	0% {
+		background-color: var(--foreground);
+	}
+	50% {
+		background-color: transparent;
+	}
+	100% {
+		background-color: var(--foreground);
+	}
+}
+
+@keyframes cursor-hide {
+	0% {
+		background-color: var(--foreground);
+	}
+	50% {
+		background-color: transparent;
+	}
+}
