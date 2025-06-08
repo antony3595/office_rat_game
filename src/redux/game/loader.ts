@@ -11,7 +11,7 @@ import {
 	selectActiveJoinedGame,
 	selectJoinedGames,
 } from "@/redux/game/gameSlice.ts";
-import type { UserGame, UserGameQuestion } from "@/api/schema/game.ts";
+import type {UserGame, UserGameExtended, UserGameQuestion} from "@/api/schema/game.ts";
 
 export const useJoinedGamesLoader = (): [boolean, UserGame[], () => void] => {
 	const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ export const useJoinedGamesLoader = (): [boolean, UserGame[], () => void] => {
 	return [isDataFetching, data, updateData];
 };
 
-export const useActiveJoinedGameLoader = (gameUUID: string): [boolean, UserGame | null, () => void] => {
+export const useActiveJoinedGameLoader = (gameUUID: string): [boolean, UserGameExtended | null, () => void] => {
 	const dispatch = useAppDispatch();
 	const game = useAppSelector(selectActiveJoinedGame);
 	const isDataFetching = useAppSelector(createLoadingSelector(["activeJoinedGame"]));

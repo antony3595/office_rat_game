@@ -22,7 +22,7 @@ const UserGamesView = () => {
 							}}
 							key={game.game.uuid}
 							style={{ animationDelay: ((index + 1) * 100).toString() + "ms" }}
-							className={"user_game_card_animation rounded border text-xs p-2 [&:not(:first-child)]:mt-4 bg-muted"}
+							className={"slide-in-right rounded border text-xs p-2 [&:not(:first-child)]:mt-4 bg-muted"}
 						>
 							<div className="flex place-content-between gap-2">
 								<div className={"flex-grow-2"}>{game.game.name || game.game.uuid}</div>

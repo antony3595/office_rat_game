@@ -15,6 +15,15 @@ const strings = {
 	congratulations_text: "Поздравляю, ты прошел игру!!!",
 	watch_game_results: "Посмотри результаты игры",
 	answer: "Ответ",
+	status: "Статус",
+	progress: "Прогресс",
+	game_duration: "Время игры",
+
+// 	keys equal to UserGameStatus
+	WIN: "Победитель",
+	IN_PROGRESS: "В процессе",
+	JOINED: "Присоединился"
+// 	end of equal keys values
 };
 
 export default strings;

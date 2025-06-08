@@ -14,12 +14,25 @@ export interface Game {
 	created_at: string;
 	is_public: boolean;
 }
+export interface GameExtended extends Game {
+	total_questions_count: number;
+}
 export interface UserGame {
 	id: number;
 	status: UserGameStatus;
 	started_at?: string | null;
 	ended_at?: string | null;
 	game: Game;
+}
+
+export interface UserGameExtended {
+	id: number;
+	status: UserGameStatus;
+	started_at?: string | null;
+	ended_at?: string | null;
+	game: GameExtended;
+	answered_questions_count: number;
+	game_duration: number | null;
 }
 
 export interface UserGameQuestion {

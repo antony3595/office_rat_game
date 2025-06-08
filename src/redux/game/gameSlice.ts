@@ -5,7 +5,7 @@ import { logout } from "../commonActions";
 import type { GamesState } from "./schema.ts";
 import type { AxiosResponse } from "axios";
 import { getApiError } from "@/api/utils.ts";
-import type { UserGame, UserGameQuestion } from "@/api/schema/game.ts";
+import type {UserGame, UserGameExtended, UserGameQuestion} from "@/api/schema/game.ts";
 
 const initialState: GamesState = {
 	joined: [],
@@ -31,14 +31,14 @@ export const fetchJoinedGames = createAsyncThunk<
 });
 
 export const fetchActiveJoinedGame = createAsyncThunk<
-	UserGame,
+	UserGameExtended,
 	string,
 	{
 		rejectValue: string;
 	}
 >("games/active/fetch", async (game_uuid, { rejectWithValue }) => {
 	try {
-		const response: AxiosResponse<UserGame> = await getUserJoinedGame(game_uuid);
+		const response: AxiosResponse<UserGameExtended> = await getUserJoinedGame(game_uuid);
 		return response.data;
 	} catch (e) {
 		return rejectWithValue(getApiError(e));

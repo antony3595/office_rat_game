@@ -1,7 +1,7 @@
-import type {UserGame, UserGameQuestion} from "@/api/schema/game.ts";
+import type {UserGame, UserGameExtended, UserGameQuestion} from "@/api/schema/game.ts";
 
 export interface GamesState {
 	joined: UserGame[];
-	active: UserGame | null;
+	active: UserGameExtended | null;
 	activeQuestion: UserGameQuestion | null;
 }

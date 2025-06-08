@@ -7,7 +7,7 @@ import strings from "@/constants/strings.ts";
 import { useParams } from "react-router-dom";
 import { type AnswerResponse, ResponseStatusEnum, UserGameStatusEnum } from "@/api/schema/game.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { type ChangeEvent, useCallback, useEffect, useState } from "react";
+import { type ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "@/redux/hooks.ts";
 import { createErrorSelector } from "@/redux/actionsErrors/selectors.ts";
 import { Input } from "@/components/ui/input.tsx";
@@ -15,7 +15,9 @@ import { sendAnswer } from "@/api/api.ts";
 import type { AxiosResponse } from "axios";
 import { getApiError } from "@/api/utils.ts";
 import { toast } from "sonner";
-
+import { Separator } from "@/components/ui/separator.tsx";
+import { formatSeconds } from "@/redux/utils/datetimeUtils.ts";
+import ratImg from "@/assets/rat.jpg"
 const UserGameView = () => {
 	const { game_uuid } = useParams();
 	const [isGameLoading, game, updateGame] = useActiveJoinedGameLoader(game_uuid!);
@@ -24,6 +26,34 @@ const UserGameView = () => {
 
 	const [answerInput, setAnswerInput] = useState<string>("");
 	const [isAnswerLoading, setAnswerLoading] = useState<boolean>(false);
+
+	const [gameDurationCounter, setGameDurationCounter] = useState(game?.game_duration || null);
+	const interval = useRef<NodeJS.Timeout | null>(null);
+
+	const clearGameDurationInterval = () => {
+		if (interval.current) {
+			clearInterval(interval.current);
+		}
+	};
+
+	useEffect(() => {
+		setGameDurationCounter(game?.game_duration || null);
+	}, [game?.game_duration]);
+
+	useEffect(() => {
+		if (gameDurationCounter !== null && game?.status == UserGameStatusEnum.IN_PROGRESS && game?.game_duration) {
+			clearGameDurationInterval();
+
+			interval.current = setInterval(() => {
+				setGameDurationCounter((gameDurationCounter || 0) + 1);
+			}, 1000);
+		} else if (game?.status == UserGameStatusEnum.WIN && game?.game_duration) {
+			clearGameDurationInterval()
+			setGameDurationCounter(game?.game_duration);
+		}
+
+		return clearGameDurationInterval;
+	}, [game?.status, game?.game_duration, gameDurationCounter]);
 
 	const nextQuestion = useCallback(async () => {
 		await loadQuestion();
@@ -85,7 +115,7 @@ const UserGameView = () => {
 		<Page>
 			<div className={"h-full flex flex-col"}>
 				{game && (
-					<div className={"user_game_card_animation rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
+					<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
 						<div className="flex place-content-between gap-2">
 							<div className={"flex-grow-2"}>{game.game.name || game.game.uuid}</div>
 							<div className={"flex-grow-1 flex justify-end"}>
@@ -96,10 +126,34 @@ const UserGameView = () => {
 								)}
 							</div>
 						</div>
-						<div>{game.status}</div>
-						<div className="flex justify-end mt-2">
+						<Separator className={"my-2"}></Separator>
+						<div>
+							<div className="flex mt-4">
+								<div>{strings.progress}</div>
+								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
+								<div key={game.answered_questions_count} style={{ animationDelay: "500ms" }} className={"slide-in-right"}>
+									{`${game.answered_questions_count}/${game.game.total_questions_count}`}
+								</div>
+							</div>
+							<div className="flex mt-4">
+								<div>{strings.status}</div>
+								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
+								<div key={game.status} style={{ animationDelay: "750ms" }} className={"slide-in-right"}>
+									{strings[game.status]}
+								</div>
+							</div>
+							<div className="flex mt-4">
+								<div>{strings.game_duration}</div>
+								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
+								<div key={game.status} style={{ animationDelay: "1000ms" }} className={"slide-in-right text-sm"}>
+									{gameDurationCounter ? formatSeconds(gameDurationCounter) : "..."}
+								</div>
+							</div>
+						</div>
+
+						<div className="flex justify-end mt-6">
 							{game?.status === UserGameStatusEnum.JOINED && (
-								<Button className={"animate-bounce"} onClick={nextQuestion}>
+								<Button className={"animate-bounce"} onClick={nextQuestion} disabled={isQuestionLoading}>
 									{strings.go_game}
 								</Button>
 							)}
@@ -109,7 +163,7 @@ const UserGameView = () => {
 				{question && (
 					<div
 						key={question.id}
-						className={"user_game_card_animation rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted h-full flex flex-col"}
+						className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted h-full flex flex-col"}
 					>
 						<div>
 							<Typer dataText={[question.question]} permanent />
@@ -123,7 +177,7 @@ const UserGameView = () => {
 									onChange={handleInputChange}
 								/>
 								<Button
-									disabled={answerInput.length === 0 || isAnswerLoading}
+									disabled={answerInput.length === 0 || isAnswerLoading || isQuestionLoading}
 									type="submit"
 									variant="outline"
 									onClick={onSubmit}
@@ -135,14 +189,20 @@ const UserGameView = () => {
 					</div>
 				)}
 				{game?.status === UserGameStatusEnum.WIN && (
-					<div className={"user_game_card_animation rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
+					<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}
+						 style={{animationDelay: "500ms"}}>
+						<div className="transform rounded-full overflow-hidden justify-self-center w-75 border bg-background scale-75">
+							<img
+								className={"rounded-full"}
+								src={ratImg}
+								alt="avatar"
+							/>
+						</div>
 						<div>
 							<div className="w-full">
-								<Typer dataText={[strings.congratulations_text]} permanent />
+								<Typer timeout={2000} dataText={[strings.congratulations_text]} permanent/>
 							</div>
-							<div className="w-full">
-								<Typer timeout={5000} dataText={[strings.watch_game_results]} permanent />
-							</div>
+
 						</div>
 					</div>
 				)}
