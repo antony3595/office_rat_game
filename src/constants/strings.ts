@@ -19,11 +19,20 @@ const strings = {
 	progress: "Прогресс",
 	game_duration: "Время игры",
 
-// 	keys equal to UserGameStatus
+	// 	keys equal to UserGameStatus
 	WIN: "Победитель",
 	IN_PROGRESS: "В процессе",
-	JOINED: "Присоединился"
-// 	end of equal keys values
+	JOINED: "Присоединился",
+	// 	end of equal keys values
+
+	join_game: "У вас нет активных игр, попробуйте найти в поиске",
+	search: "Искать",
+	join: "Присоединиться",
+	game_search: "Поиск игр",
+	game_uuid: "UUID игры",
+	game_search_description:
+		"Введите в поиск uuid игры, к которой хотите присоединиться. Если у вас его нет, то поиграть вы не сможете. Но дальше больше =)",
+	game_found: "Игра найдена",
 };
 
 export default strings;

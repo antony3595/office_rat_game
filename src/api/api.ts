@@ -4,13 +4,7 @@ import * as ep from "./endpoints";
 import { getStoredToken } from "../redux/utils/authUtils";
 import config from "../config/config";
 import { type CurrentUser } from "./schema/users";
-import type {
-	AnswerResponse,
-	GameAnswerRequest,
-	UserGame,
-	UserGameExtended,
-	UserGameQuestion
-} from "@/api/schema/game.ts";
+import type { AnswerResponse, GameAnswerRequest, UserGame, UserGameExtended, UserGameQuestion } from "@/api/schema/game.ts";
 
 const baseURL = config.API_URL;
 
@@ -57,4 +51,8 @@ export const getActiveGameQuestion = (gameUuid: string): Promise<AxiosResponse<U
 export const sendAnswer = (gameUuid: string, answer: string): Promise<AxiosResponse<AnswerResponse>> => {
 	const body: GameAnswerRequest = { answer };
 	return coreApi.post<AnswerResponse>(ep.ANSWER_TO_QUESTION.replace(":game_uuid", gameUuid), body);
+};
+
+export const joinGame = (gameUuid: string): Promise<AxiosResponse<any>> => {
+	return coreApi.post<AnswerResponse>(ep.JOIN_GAME.replace(":game_uuid", gameUuid));
 };

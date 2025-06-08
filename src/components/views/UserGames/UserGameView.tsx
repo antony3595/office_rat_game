@@ -17,7 +17,7 @@ import { getApiError } from "@/api/utils.ts";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator.tsx";
 import { formatSeconds } from "@/redux/utils/datetimeUtils.ts";
-import ratImg from "@/assets/rat.jpg"
+import ratImg from "@/assets/rat.jpg";
 const UserGameView = () => {
 	const { game_uuid } = useParams();
 	const [isGameLoading, game, updateGame] = useActiveJoinedGameLoader(game_uuid!);
@@ -48,7 +48,7 @@ const UserGameView = () => {
 				setGameDurationCounter((gameDurationCounter || 0) + 1);
 			}, 1000);
 		} else if (game?.status == UserGameStatusEnum.WIN && game?.game_duration) {
-			clearGameDurationInterval()
+			clearGameDurationInterval();
 			setGameDurationCounter(game?.game_duration);
 		}
 
@@ -129,23 +129,27 @@ const UserGameView = () => {
 						<Separator className={"my-2"}></Separator>
 						<div>
 							<div className="flex mt-4">
-								<div>{strings.progress}</div>
+								<div className="text-sm">{strings.progress}</div>
 								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
-								<div key={game.answered_questions_count} style={{ animationDelay: "500ms" }} className={"slide-in-right"}>
+								<div
+									key={game.answered_questions_count}
+									style={{ animationDelay: "500ms" }}
+									className={"slide-in-right text-sm"}
+								>
 									{`${game.answered_questions_count}/${game.game.total_questions_count}`}
 								</div>
 							</div>
 							<div className="flex mt-4">
-								<div>{strings.status}</div>
+								<div className="text-sm">{strings.status}</div>
 								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
-								<div key={game.status} style={{ animationDelay: "750ms" }} className={"slide-in-right"}>
+								<div key={game.status} style={{ animationDelay: "750ms" }} className={"slide-in-right text-sm"}>
 									{strings[game.status]}
 								</div>
 							</div>
 							<div className="flex mt-4">
-								<div>{strings.game_duration}</div>
+								<div className="text-sm">{strings.game_duration}</div>
 								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
-								<div key={game.status} style={{ animationDelay: "1000ms" }} className={"slide-in-right text-sm"}>
+								<div key={game.status} style={{ animationDelay: "1000ms" }} className={"slide-in-right text-xs"}>
 									{gameDurationCounter ? formatSeconds(gameDurationCounter) : "..."}
 								</div>
 							</div>
@@ -189,20 +193,17 @@ const UserGameView = () => {
 					</div>
 				)}
 				{game?.status === UserGameStatusEnum.WIN && (
-					<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}
-						 style={{animationDelay: "500ms"}}>
+					<div
+						className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}
+						style={{ animationDelay: "500ms" }}
+					>
 						<div className="transform rounded-full overflow-hidden justify-self-center w-75 border bg-background scale-75">
-							<img
-								className={"rounded-full"}
-								src={ratImg}
-								alt="avatar"
-							/>
+							<img className={"rounded-full"} src={ratImg} alt="avatar" />
 						</div>
 						<div>
 							<div className="w-full">
-								<Typer timeout={2000} dataText={[strings.congratulations_text]} permanent/>
+								<Typer timeout={2000} dataText={[strings.congratulations_text]} permanent />
 							</div>
-
 						</div>
 					</div>
 				)}
