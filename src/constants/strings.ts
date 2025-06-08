@@ -33,6 +33,7 @@ const strings = {
 	game_search_description:
 		"Введите в поиск uuid игры, к которой хотите присоединиться. Если у вас его нет, то поиграть вы не сможете. Но дальше больше =)",
 	game_found: "Игра найдена",
+	games: "Мои игры",
 };
 
 export default strings;

@@ -9,6 +9,8 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { useNavigate } from "react-router-dom";
+import {GAMES, HOME} from "@/urls.ts";
+import strings from "@/constants/strings.ts";
 
 const Header = () => {
 	const [, currentUser] = useCurrentUserLoader();
@@ -28,18 +30,31 @@ const Header = () => {
 										</Avatar>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent>
-										<DropdownMenuLabel>My Account</DropdownMenuLabel>
+										<DropdownMenuLabel>
+											{currentUser.username ? `@${currentUser.username}` : "My Account"}
+										</DropdownMenuLabel>
 										<DropdownMenuSeparator />
 										<DropdownMenuItem
 											onClick={() => {
-												navigate("/foo");
+												navigate(HOME);
 											}}
 										>
-											foo
+											{strings.home_page}
 										</DropdownMenuItem>
-										<DropdownMenuItem>Billing</DropdownMenuItem>
-										<DropdownMenuItem>Team</DropdownMenuItem>
-										<DropdownMenuItem>Subscription</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={() => {
+												navigate(GAMES);
+											}}
+										>
+											{strings.games}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={() => {
+												navigate("/404");
+											}}
+										>
+											404
+										</DropdownMenuItem>
 									</DropdownMenuContent>
 								</DropdownMenu>
 							</div>
