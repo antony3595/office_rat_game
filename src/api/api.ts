@@ -10,7 +10,11 @@ const baseURL = config.API_URL;
 
 export const coreApi: AxiosInstance = axios.create({
 	baseURL,
-	headers: { "Content-Type": "application/json", accept: "application/json;charset=utf-8" },
+	headers: {
+		"Content-Type": "application/json",
+		accept: "application/json;charset=utf-8",
+		"ngrok-skip-browser-warning": "test",
+	},
 });
 
 coreApi.defaults.headers.common["Authorization"] = getStoredToken();

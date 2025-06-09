@@ -24,8 +24,8 @@ const TelegramAuth = ({ outlet }: ProtectedRouteProps) => {
 	if (isTokenLoading) {
 		return (
 			<Page centrify>
-				<div className=" flex max-w-xs ">
-					<Typer dataText={[error]} heading={`${strings.auth_error}:`} />
+				<div className="flex max-w-xs centrify">
+					<Typer dataText={[strings.user_loading_]} />
 				</div>
 			</Page>
 		);
