@@ -1,6 +1,6 @@
 import Page from "@/components/views/Page.tsx";
 import { useJoinedGamesLoader } from "@/redux/game/loader.ts";
-import { Lock } from "lucide-react";
+import { CircleCheck, Lock, MessageCircleQuestion, Search, UserPlus } from "lucide-react";
 import "./user_games.css";
 import Typer from "@/components/ui/Typer/typer.tsx";
 import strings from "@/constants/strings.ts";
@@ -13,6 +13,10 @@ import { joinGame } from "@/api/api.ts";
 import { toast } from "sonner";
 import { getApiError } from "@/api/utils.ts";
 import { Input } from "@/components/ui/input.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
+import { UserGameStatusEnum } from "@/api/schema/game.ts";
+
+const ICONS_SIZE = 20;
 
 const UserGamesView = () => {
 	const [isGamesLoading, games, updateGames] = useJoinedGamesLoader();
@@ -32,7 +36,7 @@ const UserGamesView = () => {
 			await joinGame(gameUuidInput);
 			updateGames();
 			toast.success(strings.game_found);
-			setJoinModalOpen(false)
+			setJoinModalOpen(false);
 		} catch (e) {
 			const error = getApiError(e);
 			if (error) {
@@ -54,6 +58,25 @@ const UserGamesView = () => {
 			>
 				<div className="min-h-full flex">
 					<div className={"w-full flex flex-col"}>
+						{!isGamesLoading && games.length && (
+							<div>
+								<div className="flex justify-between gap-2">
+									<div className={"size-10"} />
+
+									<div className={"flex items-center"}>
+										<p className="text">{strings.your_games}</p>
+									</div>
+
+									<DialogTrigger asChild>
+										<Button variant={"secondary"} size={"icon"} className={"bg-muted"}>
+											<Search />
+										</Button>
+									</DialogTrigger>
+								</div>
+								<Separator className={"mt-4"}></Separator>
+							</div>
+						)}
+
 						{games.map((game, index) => {
 							return (
 								<div
@@ -66,10 +89,25 @@ const UserGamesView = () => {
 								>
 									<div className="flex place-content-between gap-2">
 										<div className={"flex-grow-2"}>{game.game.name || game.game.uuid}</div>
-										<div className={"flex-grow-1 flex justify-end"}>
+										<div className={"flex-grow-1 flex justify-end gap-2"}>
 											{!game.game.is_public && (
 												<div>
-													<Lock />
+													<Lock size={ICONS_SIZE} />
+												</div>
+											)}
+											{game.status === UserGameStatusEnum.JOINED && (
+												<div>
+													<UserPlus size={ICONS_SIZE} />
+												</div>
+											)}{" "}
+											{game.status === UserGameStatusEnum.WIN && (
+												<div>
+													<CircleCheck size={ICONS_SIZE} color={"green"} />
+												</div>
+											)}
+											{game.status === UserGameStatusEnum.IN_PROGRESS && (
+												<div>
+													<MessageCircleQuestion size={ICONS_SIZE} />
 												</div>
 											)}
 										</div>

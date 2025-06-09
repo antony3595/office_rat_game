@@ -12,7 +12,7 @@ const strings = {
 	games_loading_: "Загрузка игр's...",
 	game_loading_: "Загрузка игры...",
 	press: "Жми",
-	congratulations_text: "Поздравляю, ты прошел игру!!!",
+	congratulations_text: "Поздравляю, ты прошел игру !!!",
 	watch_game_results: "Посмотри результаты игры",
 	answer: "Ответ",
 	status: "Статус",
@@ -34,6 +34,7 @@ const strings = {
 		"Введите в поиск uuid игры, к которой хотите присоединиться. Если у вас его нет, то поиграть вы не сможете. Но дальше больше =)",
 	game_found: "Игра найдена",
 	games: "Мои игры",
+	your_games: "Ваши игры",
 };
 
 export default strings;

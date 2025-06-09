@@ -170,7 +170,7 @@ const UserGameView = () => {
 						className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted h-full flex flex-col"}
 					>
 						<div>
-							<Typer dataText={[question.question]} permanent />
+							<Typer dataText={[question.question]} permanent typingSpeed={50} />
 						</div>
 						<div className="mt-auto">
 							<div className="flex w-full items-center gap-2">

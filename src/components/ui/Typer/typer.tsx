@@ -10,6 +10,7 @@ export interface TyperProps {
 	timeout?: number;
 	permanent?: boolean;
 	hideCursorOnFinish?: boolean;
+	typingSpeed?: number;
 }
 
 class Typer extends React.Component<TyperProps> {
@@ -17,7 +18,7 @@ class Typer extends React.Component<TyperProps> {
 		text: "",
 		isDeleting: false,
 		loopNum: 0,
-		typingSpeed: TYPING_SPEED,
+		typingSpeed: this.props.typingSpeed || TYPING_SPEED,
 	};
 
 	componentDidMount() {
@@ -33,7 +34,7 @@ class Typer extends React.Component<TyperProps> {
 
 		this.setState({
 			text: isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1),
-			typingSpeed: isDeleting ? DELETING_SPEED : TYPING_SPEED,
+			typingSpeed: isDeleting ? DELETING_SPEED : this.props.typingSpeed || TYPING_SPEED,
 		});
 
 		if (!isDeleting && text === fullText && !permanent) {
