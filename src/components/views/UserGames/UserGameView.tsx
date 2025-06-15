@@ -1,11 +1,11 @@
 import Page from "@/components/views/Page.tsx";
 import { useActiveGameQuestionLoader, useActiveJoinedGameLoader } from "@/redux/game/loader.ts";
-import { Lock } from "lucide-react";
+import {Handshake, Loader, Lock, Trophy} from "lucide-react";
 import "./user_games.css";
 import Typer from "@/components/ui/Typer/typer.tsx";
 import strings from "@/constants/strings.ts";
 import { useParams } from "react-router-dom";
-import { type AnswerResponse, ResponseStatusEnum, UserGameStatusEnum } from "@/api/schema/game.ts";
+import { type AnswerResponse, ResponseStatusEnum, type UserGameScores, UserGameStatusEnum } from "@/api/schema/game.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { type ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "@/redux/hooks.ts";
@@ -18,23 +18,55 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator.tsx";
 import { formatSeconds } from "@/redux/utils/datetimeUtils.ts";
 import ratImg from "@/assets/rat.jpg";
+import { useToken } from "@/redux/auth/loader.ts";
+
 const UserGameView = () => {
 	const { game_uuid } = useParams();
 	const [isGameLoading, game, updateGame] = useActiveJoinedGameLoader(game_uuid!);
 	const [isQuestionLoading, question, loadQuestion] = useActiveGameQuestionLoader(game_uuid!);
 	const gameLoadingError = useAppSelector(createErrorSelector("activeJoinedGame"));
-
+	const token = useToken();
 	const [answerInput, setAnswerInput] = useState<string>("");
 	const [isAnswerLoading, setAnswerLoading] = useState<boolean>(false);
 
 	const [gameDurationCounter, setGameDurationCounter] = useState(game?.game_duration || null);
 	const interval = useRef<NodeJS.Timeout | null>(null);
+	const socket = useRef<WebSocket | null>(null);
+	const [gameScores, setGameScores] = useState<UserGameScores[]>([]);
+	const [isSocketConnected, setSocketConnected] = useState<boolean>(false);
 
 	const clearGameDurationInterval = () => {
 		if (interval.current) {
 			clearInterval(interval.current);
 		}
 	};
+
+	useEffect(() => {
+		console.log(isSocketConnected);
+		socket.current = new WebSocket(`ws://127.0.0.1:8000/ws/${game_uuid}/scores?token=${token}`);
+
+		socket.current.onopen = () => {
+			setSocketConnected(true);
+			console.log("connected");
+		};
+		socket.current.onclose = () => {
+			setSocketConnected(false);
+			console.log("close");
+		};
+		socket.current.onmessage = (event: MessageEvent<string>) => {
+			const parsed_message: { data: UserGameScores[] } = JSON.parse(event.data);
+			setGameScores(parsed_message.data);
+		};
+		socket.current.onerror = (e) => {
+			console.log(e);
+		};
+
+		return () => {
+			if (socket.current) {
+				socket.current.close();
+			}
+		};
+	}, []);
 
 	useEffect(() => {
 		setGameDurationCounter(game?.game_duration || null);
@@ -114,6 +146,27 @@ const UserGameView = () => {
 	return (
 		<Page>
 			<div className={"h-full flex flex-col"}>
+				<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
+					{gameScores.map((game, index) => (
+						<div key={game.id} className="flex [&:not(:first-child)]:mt-4">
+							{game.status == UserGameStatusEnum.JOINED && <div className={"mr-2"}><Handshake size={20} color={"oklch(70.4% .04 256.788)"} /></div>}
+								{game.status == UserGameStatusEnum.IN_PROGRESS && <div className={"mr-2"}><Loader size={20} color={"oklch(50.8% .118 165.612)"} /></div>}
+								{game.status == UserGameStatusEnum.WIN && <div className={"mr-2"}><Trophy size={20} color={"oklch(85.2% .199 91.936)"} /></div>}
+							<div className="text-sm inline-flex">
+								{index + 1}. {game.user_first_name}
+							</div>
+							<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
+							<div
+								key={game.user_first_name+game.answered_questions_count}
+								style={{ animationDelay: `${index * 100}ms` }}
+								className={"slide-in-right text-sm inline-flex"}
+							>
+								{`${game.answered_questions_count}/${game.total_questions_count}`}
+
+							</div>
+						</div>
+					))}
+				</div>
 				{game && (
 					<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
 						<div className="flex place-content-between gap-2">
@@ -167,7 +220,7 @@ const UserGameView = () => {
 				{question && (
 					<div
 						key={question.id}
-						className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted h-full flex flex-col"}
+						className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted h-full min-h-30 flex flex-col"}
 					>
 						<div>
 							<Typer dataText={[question.question]} permanent typingSpeed={50} />

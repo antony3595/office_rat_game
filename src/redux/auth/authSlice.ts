@@ -76,5 +76,6 @@ const authSlice = createSlice({
 
 export const selectAuth = (state: RootState): AuthState => state.auth;
 export const selectCurrentUser = (state: RootState): CurrentUser => state.auth.user;
+export const selectToken = (state: RootState): string => state.auth.token.token;
 
 export default authSlice.reducer;

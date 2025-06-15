@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import type { CurrentUser } from "../../api/schema/users";
+import type { CurrentUser } from "@/api/schema/users.ts";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { fetchCurrentUser, fetchToken, selectAuth } from "./authSlice";
+import { fetchCurrentUser, fetchToken, selectAuth, selectToken } from "./authSlice";
 import { StateStatus } from "../types";
-import type { AuthResponse } from "../../api/schema/auth";
+import type { AuthResponse } from "@/api/schema/auth.ts";
 import { createLoadingSelector, createStatusSelector } from "../actionsStatuses/selectors.ts";
 import { createErrorSelector } from "../actionsErrors/selectors.ts";
 
@@ -47,4 +47,8 @@ export const useCurrentUserLoader = (): [boolean, CurrentUser, () => void] => {
 	}, [dispatch, token, loggedIn]);
 
 	return [isDataFetching, data, updateData];
+};
+
+export const useToken = (): string => {
+	return useAppSelector(selectToken);
 };

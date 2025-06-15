@@ -35,6 +35,7 @@ const strings = {
 	game_found: "Игра найдена",
 	games: "Мои игры",
 	your_games: "Ваши игры",
+	gamer: "Игрок",
 };
 
 export default strings;
