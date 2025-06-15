@@ -36,6 +36,8 @@ const strings = {
 	games: "Мои игры",
 	your_games: "Ваши игры",
 	gamer: "Игрок",
+	statistics: "Статистика",
+	statistics_descr: "Здесь можно посмотреть статистику игры в рельном времени",
 };
 
 export default strings;

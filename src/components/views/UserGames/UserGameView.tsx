@@ -1,6 +1,6 @@
 import Page from "@/components/views/Page.tsx";
 import { useActiveGameQuestionLoader, useActiveJoinedGameLoader } from "@/redux/game/loader.ts";
-import {Handshake, Loader, Lock, Trophy} from "lucide-react";
+import { ChartBarBig, Lock } from "lucide-react";
 import "./user_games.css";
 import Typer from "@/components/ui/Typer/typer.tsx";
 import strings from "@/constants/strings.ts";
@@ -19,6 +19,9 @@ import { Separator } from "@/components/ui/separator.tsx";
 import { formatSeconds } from "@/redux/utils/datetimeUtils.ts";
 import ratImg from "@/assets/rat.jpg";
 import { useToken } from "@/redux/auth/loader.ts";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet.tsx";
+import GameScores from "@/components/views/UserGames/GameScores.tsx";
+import { clsx } from "clsx";
 
 const UserGameView = () => {
 	const { game_uuid } = useParams();
@@ -34,6 +37,15 @@ const UserGameView = () => {
 	const socket = useRef<WebSocket | null>(null);
 	const [gameScores, setGameScores] = useState<UserGameScores[]>([]);
 	const [isSocketConnected, setSocketConnected] = useState<boolean>(false);
+	const [isScoresTriggerAnimated, setScoresTriggerAnimated] = useState<boolean>(false);
+	console.log(isScoresTriggerAnimated);
+	const pingScoresTrigger = () => {
+		setScoresTriggerAnimated(true);
+
+		setTimeout(() => {
+			setScoresTriggerAnimated(false);
+		}, 1000);
+	};
 
 	const clearGameDurationInterval = () => {
 		if (interval.current) {
@@ -42,12 +54,12 @@ const UserGameView = () => {
 	};
 
 	useEffect(() => {
-		console.log(isSocketConnected);
 		socket.current = new WebSocket(`ws://127.0.0.1:8000/ws/${game_uuid}/scores?token=${token}`);
 
 		socket.current.onopen = () => {
 			setSocketConnected(true);
 			console.log("connected");
+			pingScoresTrigger();
 		};
 		socket.current.onclose = () => {
 			setSocketConnected(false);
@@ -56,6 +68,7 @@ const UserGameView = () => {
 		socket.current.onmessage = (event: MessageEvent<string>) => {
 			const parsed_message: { data: UserGameScores[] } = JSON.parse(event.data);
 			setGameScores(parsed_message.data);
+			pingScoresTrigger();
 		};
 		socket.current.onerror = (e) => {
 			console.log(e);
@@ -146,35 +159,50 @@ const UserGameView = () => {
 	return (
 		<Page>
 			<div className={"h-full flex flex-col"}>
-				<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
-					{gameScores.map((game, index) => (
-						<div key={game.id} className="flex [&:not(:first-child)]:mt-4">
-							{game.status == UserGameStatusEnum.JOINED && <div className={"mr-2"}><Handshake size={20} color={"oklch(70.4% .04 256.788)"} /></div>}
-								{game.status == UserGameStatusEnum.IN_PROGRESS && <div className={"mr-2"}><Loader size={20} color={"oklch(50.8% .118 165.612)"} /></div>}
-								{game.status == UserGameStatusEnum.WIN && <div className={"mr-2"}><Trophy size={20} color={"oklch(85.2% .199 91.936)"} /></div>}
-							<div className="text-sm inline-flex">
-								{index + 1}. {game.user_first_name}
-							</div>
-							<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
-							<div
-								key={game.user_first_name+game.answered_questions_count}
-								style={{ animationDelay: `${index * 100}ms` }}
-								className={"slide-in-right text-sm inline-flex"}
-							>
-								{`${game.answered_questions_count}/${game.total_questions_count}`}
-
-							</div>
-						</div>
-					))}
-				</div>
 				{game && (
 					<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
 						<div className="flex place-content-between gap-2">
-							<div className={"flex-grow-2"}>{game.game.name || game.game.uuid}</div>
+							<div className={"flex flex-grow-2 items-center "}>
+								<span>{game.game.name || game.game.uuid}</span>
+								<div className={"ml-2"} onClick={pingScoresTrigger}>
+									<Lock size={18} />
+								</div>
+							</div>
 							<div className={"flex-grow-1 flex justify-end"}>
 								{!game.game.is_public && (
-									<div>
-										<Lock />
+									<div className={"flex"}>
+										<Sheet>
+											<div>
+												<span className="flex relative">
+													<SheetTrigger asChild>
+														<Button
+															disabled={!isSocketConnected}
+															size={"icon"}
+															variant="outline"
+															className={"rounded-full bg-muted"}
+														>
+															<ChartBarBig />
+														</Button>
+													</SheetTrigger>
+													<span
+														className={clsx(
+															"absolute inline-flex h-full w-full rounded-full bg-slate-500 opacity-75",
+															{
+																"animate-ping": isScoresTriggerAnimated,
+																invisible: !isScoresTriggerAnimated,
+															}
+														)}
+													/>
+												</span>
+											</div>
+											<SheetContent>
+												<SheetHeader>
+													<SheetTitle>{strings.statistics}</SheetTitle>
+													<SheetDescription>{strings.statistics_descr}</SheetDescription>
+												</SheetHeader>
+												<GameScores gameScores={gameScores} />
+											</SheetContent>
+										</Sheet>
 									</div>
 								)}
 							</div>
