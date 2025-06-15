@@ -22,6 +22,8 @@ import { useToken } from "@/redux/auth/loader.ts";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet.tsx";
 import GameScores from "@/components/views/UserGames/GameScores.tsx";
 import { clsx } from "clsx";
+import { useTimeCounter } from "@/hooks/useTimeCounter.ts";
+import { isNumber } from "@/utils/typeguards.ts";
 
 const UserGameView = () => {
 	const { game_uuid } = useParams();
@@ -32,25 +34,22 @@ const UserGameView = () => {
 	const [answerInput, setAnswerInput] = useState<string>("");
 	const [isAnswerLoading, setAnswerLoading] = useState<boolean>(false);
 
-	const [gameDurationCounter, setGameDurationCounter] = useState(game?.game_duration || null);
-	const interval = useRef<NodeJS.Timeout | null>(null);
 	const socket = useRef<WebSocket | null>(null);
 	const [gameScores, setGameScores] = useState<UserGameScores[]>([]);
 	const [isSocketConnected, setSocketConnected] = useState<boolean>(false);
 	const [isScoresTriggerAnimated, setScoresTriggerAnimated] = useState<boolean>(false);
-	console.log(isScoresTriggerAnimated);
+
+	const gameDuration = useTimeCounter(
+		isNumber(game?.game_duration) ? game?.game_duration : null,
+		Boolean(game?.status == UserGameStatusEnum.WIN && game?.game_duration)
+	);
+
 	const pingScoresTrigger = () => {
 		setScoresTriggerAnimated(true);
 
 		setTimeout(() => {
 			setScoresTriggerAnimated(false);
 		}, 1000);
-	};
-
-	const clearGameDurationInterval = () => {
-		if (interval.current) {
-			clearInterval(interval.current);
-		}
 	};
 
 	useEffect(() => {
@@ -80,25 +79,6 @@ const UserGameView = () => {
 			}
 		};
 	}, []);
-
-	useEffect(() => {
-		setGameDurationCounter(game?.game_duration || null);
-	}, [game?.game_duration]);
-
-	useEffect(() => {
-		if (gameDurationCounter !== null && game?.status == UserGameStatusEnum.IN_PROGRESS && game?.game_duration) {
-			clearGameDurationInterval();
-
-			interval.current = setInterval(() => {
-				setGameDurationCounter((gameDurationCounter || 0) + 1);
-			}, 1000);
-		} else if (game?.status == UserGameStatusEnum.WIN && game?.game_duration) {
-			clearGameDurationInterval();
-			setGameDurationCounter(game?.game_duration);
-		}
-
-		return clearGameDurationInterval;
-	}, [game?.status, game?.game_duration, gameDurationCounter]);
 
 	const nextQuestion = useCallback(async () => {
 		await loadQuestion();
@@ -231,7 +211,7 @@ const UserGameView = () => {
 								<div className="text-sm">{strings.game_duration}</div>
 								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
 								<div key={game.status} style={{ animationDelay: "1000ms" }} className={"slide-in-right text-xs"}>
-									{gameDurationCounter ? formatSeconds(gameDurationCounter) : "..."}
+									{gameDuration !== null ? formatSeconds(gameDuration) : "..."}
 								</div>
 							</div>
 						</div>
