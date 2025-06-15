@@ -38,6 +38,7 @@ const strings = {
 	gamer: "Игрок",
 	statistics: "Статистика",
 	statistics_descr: "Здесь можно посмотреть статистику игры в рельном времени",
+	relogin: "Перелогиниться",
 };
 
 export default strings;

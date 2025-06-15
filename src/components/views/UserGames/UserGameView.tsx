@@ -253,6 +253,16 @@ const UserGameView = () => {
 						<div>
 							<Typer dataText={[question.question]} permanent typingSpeed={50} />
 						</div>
+
+						{question.images && (
+							<div className={"flex gap-2 flex-wrap justify-start my-4"}>
+								{question.images.map((image) => (
+									<div key={image.image_url} className={"border rounded-sm flex-grow-0"}>
+										<img src={image.image_url} alt="" />
+									</div>
+								))}
+							</div>
+						)}
 						<div className="mt-auto">
 							<div className="flex w-full items-center gap-2">
 								<Input

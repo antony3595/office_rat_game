@@ -9,12 +9,16 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { useNavigate } from "react-router-dom";
-import {GAMES, HOME} from "@/urls.ts";
+import { GAMES, HOME } from "@/urls.ts";
 import strings from "@/constants/strings.ts";
+import { useAppDispatch } from "@/redux/hooks.ts";
+import { logout } from "@/redux/commonActions.ts";
 
 const Header = () => {
 	const [, currentUser] = useCurrentUserLoader();
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
+
 	return (
 		<div className="min-h-full">
 			<nav className="bg-muted">
@@ -47,6 +51,13 @@ const Header = () => {
 											}}
 										>
 											{strings.games}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={() => {
+												dispatch(logout());
+											}}
+										>
+											{strings.relogin}
 										</DropdownMenuItem>
 										<DropdownMenuItem
 											onClick={() => {

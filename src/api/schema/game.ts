@@ -48,11 +48,15 @@ export interface UserGameScores {
 	user_first_name: string;
 }
 
+export interface QuestionImage {
+	image_url: string;
+	question_id: number;
+}
 export interface UserGameQuestion {
 	id: number;
 	created_at: string;
 	question: string;
-	images: string[];
+	images: QuestionImage[];
 }
 
 export type ResponseStatus = "SUCCESS" | "FAIL" | "ERROR";
