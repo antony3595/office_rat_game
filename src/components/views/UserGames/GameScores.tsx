@@ -1,6 +1,6 @@
 import { type UserGameScores, UserGameStatusEnum } from "@/api/schema/game.ts";
 import React from "react";
-import { Handshake, Loader, Trophy } from "lucide-react";
+import { Crown, Handshake, Loader, Trophy } from "lucide-react";
 
 export interface GameScoresProps {
 	gameScores: UserGameScores[];
@@ -20,9 +20,24 @@ const GameScores: React.FC<GameScoresProps> = ({ gameScores }) => {
 							<Loader size={20} color={"oklch(50.8% .118 165.612)"} />
 						</div>
 					)}
-					{game.status == UserGameStatusEnum.WIN && (
+					{game.status == UserGameStatusEnum.WIN && index == 1 && (
 						<div className={"mr-2"}>
-							<Trophy size={20} color={"oklch(85.2% .199 91.936)"} />
+							<Trophy size={20} color={"#C0C0C0"} />
+						</div>
+					)}
+					{game.status == UserGameStatusEnum.WIN && index == 2 && (
+						<div className={"mr-2"}>
+							<Trophy size={20} color={"#CD7F32"} />
+						</div>
+					)}
+					{game.status == UserGameStatusEnum.WIN && index > 2 && (
+						<div className={"mr-2"}>
+							<Trophy size={20} />
+						</div>
+					)}
+					{game.status == UserGameStatusEnum.WIN && index == 0 && (
+						<div className={"mr-2"}>
+							<Crown size={20} color={"#FFD700"} />
 						</div>
 					)}
 					<div className="text-sm inline-flex">
