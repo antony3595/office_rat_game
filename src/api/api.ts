@@ -5,6 +5,7 @@ import { getStoredToken } from "../redux/utils/authUtils";
 import config from "../config/config";
 import { type CurrentUser } from "./schema/users";
 import type { AnswerResponse, GameAnswerRequest, UserGame, UserGameExtended, UserGameQuestion } from "@/api/schema/game.ts";
+import type {AchievementWithCount} from "@/api/schema/achievement.ts";
 
 const baseURL = config.API_URL;
 
@@ -59,4 +60,8 @@ export const sendAnswer = (gameUuid: string, answer: string): Promise<AxiosRespo
 
 export const joinGame = (gameUuid: string): Promise<AxiosResponse<any>> => {
 	return coreApi.post<AnswerResponse>(ep.JOIN_GAME.replace(":game_uuid", gameUuid));
+};
+
+export const getMyAchievements = (): Promise<AxiosResponse<AchievementWithCount[]>> => {
+	return coreApi.get<AchievementWithCount[]>(ep.MY_ACHIEVEMENTS);
 };

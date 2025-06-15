@@ -9,7 +9,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { useNavigate } from "react-router-dom";
-import { GAMES, HOME } from "@/urls.ts";
+import { ACHIEVEMENTS, GAMES, HOME } from "@/urls.ts";
 import strings from "@/constants/strings.ts";
 import { useAppDispatch } from "@/redux/hooks.ts";
 import { logout } from "@/redux/commonActions.ts";
@@ -51,6 +51,13 @@ const Header = () => {
 											}}
 										>
 											{strings.games}
+										</DropdownMenuItem>
+										<DropdownMenuItem
+											onClick={() => {
+												navigate(ACHIEVEMENTS);
+											}}
+										>
+											{strings.achievements}
 										</DropdownMenuItem>
 										<DropdownMenuItem
 											onClick={() => {

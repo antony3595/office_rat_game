@@ -40,6 +40,7 @@ const strings = {
 	statistics_descr: "Здесь можно посмотреть статистику игры в рельном времени",
 	relogin: "Перелогиниться",
 	achievement_unlocked: "Новое достижение",
+	achievements: "Ачивки",
 };
 
 export default strings;
