@@ -31,7 +31,7 @@
 		"tailwindcss": "^4.1.8"
 	},
 	"scripts": {
-		"predeploy": "npm run build",
+		"predeploy": "VITE_APP_BUILD_TYPE=development npm run build",
 		"deploy": "gh-pages -d dist",
 		"dev": "vite --host",
 		"build": "tsc -b && vite build",

@@ -19,10 +19,19 @@ const AchievementsView = () => {
 							);
 						})}
 					</div>
+					{!isAchievementsLoading && !achievements.length && (
+						<div className="my-auto w-full">
+							<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
+								<div>
+									<Typer dataText={[strings.no_achievements]} permanent />
+								</div>
+							</div>
+						</div>
+					)}
 
 					{isAchievementsLoading && (
 						<div className={"my-auto flex justify-center"}>
-							<Typer dataText={[strings.games_loading_]} />
+							<Typer dataText={[strings.achievements_loading]} />
 						</div>
 					)}
 				</div>

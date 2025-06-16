@@ -1,5 +1,5 @@
-export const LOGIN_TG = "auth/tg/";
-export const CURRENT_USER = "users/me/";
+export const LOGIN_TG = "auth/tg";
+export const CURRENT_USER = "users/me";
 export const USER_JOINED_GAMES = "games/joined";
 export const USER_JOINED_GAME = "games/joined/:game_uuid";
 export const JOIN_GAME = "/games/:game_uuid/join";

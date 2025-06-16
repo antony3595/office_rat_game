@@ -41,6 +41,8 @@ const strings = {
 	relogin: "Перелогиниться",
 	achievement_unlocked: "Новое достижение",
 	achievements: "Ачивки",
+	achievements_loading: "Загрузка ачивок...",
+	no_achievements: "У вас нет ачивок. Все еще впереди",
 };
 
 export default strings;

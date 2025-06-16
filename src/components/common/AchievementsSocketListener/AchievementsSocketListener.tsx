@@ -3,13 +3,14 @@ import { useToken } from "@/redux/auth/loader.ts";
 import type { AchievementWithCount } from "@/api/schema/achievement.ts";
 import { toast } from "sonner";
 import strings from "@/constants/strings.ts";
+import config from "@/config/config.ts";
 
 const AchievementsSocketListener = () => {
 	const socket = useRef<WebSocket | null>(null);
 	const token = useToken();
 
 	useEffect(() => {
-		socket.current = new WebSocket(`ws://127.0.0.1:8000/ws/achievements?token=${token}`);
+		socket.current = new WebSocket(`${config.WS_URL}ws/achievements?token=${token}`);
 
 		socket.current.onopen = () => {
 			console.log("connected");

@@ -24,6 +24,7 @@ import GameScores from "@/components/views/UserGames/GameScores.tsx";
 import { clsx } from "clsx";
 import { useTimeCounter } from "@/hooks/useTimeCounter.ts";
 import { isNumber } from "@/utils/typeguards.ts";
+import config from "@/config/config.ts";
 
 const UserGameView = () => {
 	const { game_uuid } = useParams();
@@ -53,7 +54,7 @@ const UserGameView = () => {
 	};
 
 	useEffect(() => {
-		socket.current = new WebSocket(`ws://127.0.0.1:8000/ws/${game_uuid}/scores?token=${token}`);
+		socket.current = new WebSocket(`${config.WS_URL}ws/${game_uuid}/scores?token=${token}`);
 
 		socket.current.onopen = () => {
 			setSocketConnected(true);

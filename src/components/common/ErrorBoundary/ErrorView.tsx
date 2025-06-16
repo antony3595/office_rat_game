@@ -1,13 +1,16 @@
 import React, { type JSX } from "react";
 import "./styles.scss";
-import * as urls from "../../../urls";
-import { Link } from "react-router-dom";
+import { HOME } from "@/urls.ts";
+import { useNavigate } from "react-router-dom";
+import strings from "@/constants/strings.ts";
+import { Button } from "@/components/ui/button.tsx";
 
 const ErrorView: React.FC<{ message: JSX.Element | string; title: string; hideHomeLink?: boolean }> = ({
 	message,
 	title,
 	hideHomeLink = false,
 }) => {
+	const navigate = useNavigate();
 	return (
 		<div>
 			<div className="error-block">
@@ -15,7 +18,15 @@ const ErrorView: React.FC<{ message: JSX.Element | string; title: string; hideHo
 					<h3>{title}</h3>
 					{typeof message === "string" ? <p style={{ whiteSpace: "pre-wrap" }}>{message}</p> : message}
 				</div>
-				{!hideHomeLink && <Link to={urls.HOME}>{"strings.go_back_home"}</Link>}
+				{!hideHomeLink && (
+					<Button
+						onClick={() => {
+							navigate(HOME);
+						}}
+					>
+						{strings.home_page}
+					</Button>
+				)}
 			</div>
 		</div>
 	);

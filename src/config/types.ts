@@ -12,6 +12,7 @@ export interface Config {
 	BUILD_TYPE: BuildType;
 	stateVersion: number;
 	API_URL: string;
+	WS_URL: string;
 	localStorageKey: string;
 	tgBotLink: string;
 }
