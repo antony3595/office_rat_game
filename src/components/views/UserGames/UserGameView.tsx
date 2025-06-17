@@ -7,7 +7,7 @@ import strings from "@/constants/strings.ts";
 import { useParams } from "react-router-dom";
 import { type AnswerResponse, ResponseStatusEnum, type UserGameScores, UserGameStatusEnum } from "@/api/schema/game.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { type ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks.ts";
 import { createErrorSelector } from "@/redux/actionsErrors/selectors.ts";
 import { Input } from "@/components/ui/input.tsx";
@@ -25,19 +25,22 @@ import { clsx } from "clsx";
 import { useTimeCounter } from "@/hooks/useTimeCounter.ts";
 import { isNumber } from "@/utils/typeguards.ts";
 import config from "@/config/config.ts";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
 const UserGameView = () => {
 	const { game_uuid } = useParams();
+	const token = useToken();
+	const { lastMessage, readyState } = useWebSocket(`${config.WS_URL}ws/${game_uuid}/scores?token=${token}`, {
+		shouldReconnect: () => true,
+	});
+
 	const [isGameLoading, game, updateGame] = useActiveJoinedGameLoader(game_uuid!);
 	const [isQuestionLoading, question, loadQuestion] = useActiveGameQuestionLoader(game_uuid!);
 	const gameLoadingError = useAppSelector(createErrorSelector("activeJoinedGame"));
-	const token = useToken();
 	const [answerInput, setAnswerInput] = useState<string>("");
 	const [isAnswerLoading, setAnswerLoading] = useState<boolean>(false);
 
-	const socket = useRef<WebSocket | null>(null);
 	const [gameScores, setGameScores] = useState<UserGameScores[]>([]);
-	const [isSocketConnected, setSocketConnected] = useState<boolean>(false);
 	const [isScoresTriggerAnimated, setScoresTriggerAnimated] = useState<boolean>(false);
 
 	const gameDuration = useTimeCounter(
@@ -54,32 +57,18 @@ const UserGameView = () => {
 	};
 
 	useEffect(() => {
-		socket.current = new WebSocket(`${config.WS_URL}ws/${game_uuid}/scores?token=${token}`);
-
-		socket.current.onopen = () => {
-			setSocketConnected(true);
-			console.log("connected");
-			pingScoresTrigger();
-		};
-		socket.current.onclose = () => {
-			setSocketConnected(false);
-			console.log("close");
-		};
-		socket.current.onmessage = (event: MessageEvent<string>) => {
-			const parsed_message: { data: UserGameScores[] } = JSON.parse(event.data);
+		if (lastMessage?.data) {
+			const parsed_message: { data: UserGameScores[] } = JSON.parse(lastMessage.data);
 			setGameScores(parsed_message.data);
 			pingScoresTrigger();
-		};
-		socket.current.onerror = (e) => {
-			console.log(e);
-		};
+		}
+	}, [lastMessage]);
 
-		return () => {
-			if (socket.current) {
-				socket.current.close();
-			}
-		};
-	}, []);
+	useEffect(() => {
+		if (readyState === ReadyState.OPEN) {
+			pingScoresTrigger();
+		}
+	}, [readyState]);
 
 	const nextQuestion = useCallback(async () => {
 		await loadQuestion();
@@ -157,7 +146,7 @@ const UserGameView = () => {
 												<span className="flex relative">
 													<SheetTrigger asChild>
 														<Button
-															disabled={!isSocketConnected}
+															disabled={readyState !== ReadyState.OPEN}
 															size={"icon"}
 															variant="outline"
 															className={"rounded-full bg-muted"}
