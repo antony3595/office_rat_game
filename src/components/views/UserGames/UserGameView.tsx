@@ -5,7 +5,7 @@ import "./user_games.css";
 import Typer from "@/components/ui/Typer/typer.tsx";
 import strings from "@/constants/strings.ts";
 import { useParams } from "react-router-dom";
-import { type AnswerResponse, ResponseStatusEnum, type UserGameScores, UserGameStatusEnum } from "@/api/schema/game.ts";
+import { type AnswerResponse, ResponseStatusEnum, type UserGameScoresWithOnline, UserGameStatusEnum } from "@/api/schema/game.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { type ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks.ts";
@@ -40,7 +40,7 @@ const UserGameView = () => {
 	const [answerInput, setAnswerInput] = useState<string>("");
 	const [isAnswerLoading, setAnswerLoading] = useState<boolean>(false);
 
-	const [gameScores, setGameScores] = useState<UserGameScores[]>([]);
+	const [gameScores, setGameScores] = useState<UserGameScoresWithOnline[]>([]);
 	const [isScoresTriggerAnimated, setScoresTriggerAnimated] = useState<boolean>(false);
 
 	const gameDuration = useTimeCounter(
@@ -58,7 +58,7 @@ const UserGameView = () => {
 
 	useEffect(() => {
 		if (lastMessage?.data) {
-			const parsed_message: { data: UserGameScores[] } = JSON.parse(lastMessage.data);
+			const parsed_message: { data: UserGameScoresWithOnline[] } = JSON.parse(lastMessage.data);
 			setGameScores(parsed_message.data);
 			pingScoresTrigger();
 		}

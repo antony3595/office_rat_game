@@ -1,9 +1,10 @@
-import { type UserGameScores, UserGameStatusEnum } from "@/api/schema/game.ts";
+import { type UserGameScoresWithOnline, UserGameStatusEnum } from "@/api/schema/game.ts";
 import React from "react";
 import { Crown, Handshake, Loader, Trophy } from "lucide-react";
+import {clsx} from "clsx";
 
 export interface GameScoresProps {
-	gameScores: UserGameScores[];
+	gameScores: UserGameScoresWithOnline[];
 }
 const GameScores: React.FC<GameScoresProps> = ({ gameScores }) => {
 	return (
@@ -40,7 +41,7 @@ const GameScores: React.FC<GameScoresProps> = ({ gameScores }) => {
 							<Crown size={20} color={"#FFD700"} />
 						</div>
 					)}
-					<div className="text-sm inline-flex">
+					<div className={clsx("text-sm inline-flex", {"text-muted-foreground": !game.is_online})}>
 						{index + 1}. {game.user_first_name}
 					</div>
 					<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>

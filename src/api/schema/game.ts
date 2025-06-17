@@ -39,6 +39,7 @@ export interface UserGameExtended {
 
 export interface UserGameScores {
 	id: number;
+	user_id: number;
 	status: UserGameStatus;
 	started_at: string | null;
 	ended_at: string | null;
@@ -46,6 +47,10 @@ export interface UserGameScores {
 	total_questions_count: number;
 	game_duration: number;
 	user_first_name: string;
+}
+
+export interface UserGameScoresWithOnline extends UserGameScores {
+	is_online: boolean;
 }
 
 export interface QuestionImage {
