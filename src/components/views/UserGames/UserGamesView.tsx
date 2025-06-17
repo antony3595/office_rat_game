@@ -58,7 +58,7 @@ const UserGamesView = () => {
 			>
 				<div className="min-h-full flex">
 					<div className={"w-full flex flex-col"}>
-						{!isGamesLoading && games.length && (
+						{Boolean(!isGamesLoading && games.length) && (
 							<div>
 								<div className="flex justify-between gap-2">
 									<div className={"size-10"} />

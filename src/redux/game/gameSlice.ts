@@ -1,16 +1,18 @@
 import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getActiveGameQuestion, getUserJoinedGame, getUserJoinedGames } from "@/api/api.ts";
+import { getActiveGameQuestion, getMyAchievements, getUserJoinedGame, getUserJoinedGames } from "@/api/api.ts";
 import type { RootState } from "../store";
 import { logout } from "../commonActions";
 import type { GamesState } from "./schema.ts";
 import type { AxiosResponse } from "axios";
 import { getApiError } from "@/api/utils.ts";
-import type {UserGame, UserGameExtended, UserGameQuestion} from "@/api/schema/game.ts";
+import type { UserGame, UserGameExtended, UserGameQuestion } from "@/api/schema/game.ts";
+import type { AchievementWithCount } from "@/api/schema/achievement.ts";
 
 const initialState: GamesState = {
 	joined: [],
 	active: null,
 	activeQuestion: null,
+	achievements: [],
 };
 export const resetActiveGame = createAction<undefined>("games/active/reset");
 export const resetActiveQuestion = createAction<undefined>("games/activeQuestion/reset");
@@ -59,6 +61,20 @@ export const fetchActiveGameQuestion = createAsyncThunk<
 		return rejectWithValue(getApiError(e));
 	}
 });
+export const fetchAchievements = createAsyncThunk<
+	AchievementWithCount[],
+	undefined,
+	{
+		rejectValue: string;
+	}
+>("games/achievements/fetch", async (_, { rejectWithValue }) => {
+	try {
+		const response: AxiosResponse<AchievementWithCount[]> = await getMyAchievements();
+		return response.data;
+	} catch (e) {
+		return rejectWithValue(getApiError(e));
+	}
+});
 
 const gamesSlice = createSlice({
 	name: "games",
@@ -76,6 +92,9 @@ const gamesSlice = createSlice({
 			.addCase(fetchActiveGameQuestion.fulfilled, (state, { payload }) => {
 				state.activeQuestion = payload;
 			})
+			.addCase(fetchAchievements.fulfilled, (state, { payload }) => {
+				state.achievements = payload;
+			})
 			.addCase(resetActiveGame, (state) => {
 				state.active = null;
 			})
@@ -89,5 +108,6 @@ const gamesSlice = createSlice({
 export const selectJoinedGames = (state: RootState): UserGame[] => state.games.joined;
 export const selectActiveJoinedGame = (state: RootState): typeof initialState.active => state.games.active;
 export const selectActiveGameQuestion = (state: RootState): typeof initialState.activeQuestion => state.games.activeQuestion;
+export const selectAchievements = (state: RootState): typeof initialState.achievements => state.games.achievements;
 
 export default gamesSlice.reducer;

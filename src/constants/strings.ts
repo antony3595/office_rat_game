@@ -35,6 +35,14 @@ const strings = {
 	game_found: "Игра найдена",
 	games: "Мои игры",
 	your_games: "Ваши игры",
+	gamer: "Игрок",
+	statistics: "Статистика",
+	statistics_descr: "Здесь можно посмотреть статистику игры в рельном времени",
+	relogin: "Перелогиниться",
+	achievement_unlocked: "Новое достижение",
+	achievements: "Ачивки",
+	achievements_loading: "Загрузка ачивок...",
+	no_achievements: "У вас нет ачивок. Все еще впереди",
 };
 
 export default strings;

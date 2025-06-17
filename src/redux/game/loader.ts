@@ -3,15 +3,19 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { StateStatus } from "../types";
 import { createLoadingSelector, createStatusSelector } from "../actionsStatuses/selectors.ts";
 import {
+	fetchAchievements,
 	fetchActiveGameQuestion,
 	fetchActiveJoinedGame,
 	fetchJoinedGames,
-	resetActiveGame, resetActiveQuestion,
+	resetActiveGame,
+	resetActiveQuestion,
+	selectAchievements,
 	selectActiveGameQuestion,
 	selectActiveJoinedGame,
 	selectJoinedGames,
 } from "@/redux/game/gameSlice.ts";
-import type {UserGame, UserGameExtended, UserGameQuestion} from "@/api/schema/game.ts";
+import type { UserGame, UserGameExtended, UserGameQuestion } from "@/api/schema/game.ts";
+import type { AchievementWithCount } from "@/api/schema/achievement.ts";
 
 export const useJoinedGamesLoader = (): [boolean, UserGame[], () => void] => {
 	const dispatch = useAppDispatch();
@@ -69,6 +73,24 @@ export const useActiveGameQuestionLoader = (gameUUID: string): [boolean, UserGam
 	const updateData = () => {
 		return dispatch(fetchActiveGameQuestion(gameUUID));
 	};
+
+	return [isDataFetching, data, updateData];
+};
+
+export const useAchievementsLoader = (): [boolean, AchievementWithCount[], () => Promise<any>] => {
+	const dispatch = useAppDispatch();
+	const achievements = useAppSelector(selectAchievements);
+	const isDataFetching = useAppSelector(createLoadingSelector(["achievements"]));
+	const data = achievements;
+
+	const updateData = () => {
+		return dispatch(fetchAchievements());
+	};
+	useEffect(() => {
+		if (!isDataFetching) {
+			updateData();
+		}
+	}, [dispatch]);
 
 	return [isDataFetching, data, updateData];
 };

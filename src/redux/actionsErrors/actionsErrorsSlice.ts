@@ -2,7 +2,12 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { actionErrorsInitialState, addAsyncActionsCases } from "./errorsUtils";
 import { logout } from "../commonActions";
 import { fetchCurrentUser, fetchToken } from "../auth/authSlice";
-import { fetchActiveGameQuestion, fetchActiveJoinedGame, fetchJoinedGames } from "@/redux/game/gameSlice.ts";
+import {
+	fetchAchievements,
+	fetchActiveGameQuestion,
+	fetchActiveJoinedGame,
+	fetchJoinedGames
+} from "@/redux/game/gameSlice.ts";
 
 const asyncActions = {
 	authorization: fetchToken,
@@ -10,6 +15,7 @@ const asyncActions = {
 	joinedGames: fetchJoinedGames,
 	activeJoinedGame: fetchActiveJoinedGame,
 	activeGameQuestion: fetchActiveGameQuestion,
+	achievements: fetchAchievements,
 };
 export type ActionErrorKey = keyof typeof asyncActions;
 

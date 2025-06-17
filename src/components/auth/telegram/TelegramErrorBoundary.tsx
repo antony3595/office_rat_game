@@ -2,6 +2,7 @@ import { Component, type JSX, type ReactNode } from "react";
 import strings from "../../../constants/strings";
 import config from "../../../config/config";
 import ErrorView from "../../common/ErrorBoundary/ErrorView";
+import { LaunchParamsRetrieveError } from "@telegram-apps/sdk-react";
 
 interface TelegramErrorBoundaryProps {
 	children: ReactNode;
@@ -19,7 +20,11 @@ class TelegramErrorBoundary extends Component<TelegramErrorBoundaryProps, Telegr
 	}
 
 	componentDidCatch(error: Error) {
-		this.setState({ hasError: true, message: error.message });
+		if (error instanceof LaunchParamsRetrieveError) {
+			this.setState({ hasError: true, message: error.message });
+		} else {
+			throw error;
+		}
 	}
 
 	render() {

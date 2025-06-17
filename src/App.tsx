@@ -6,8 +6,7 @@ import { Toaster } from "@/components/ui/sonner.tsx";
 const App = () => {
 	return (
 		<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-			<Toaster position="top-center" toastOptions={{ className: "pixel-font" }} richColors  />
-
+			<Toaster position="top-center" closeButton toastOptions={{ className: "pixel-font" }} richColors />
 			<div>
 				<PageRouter />
 			</div>

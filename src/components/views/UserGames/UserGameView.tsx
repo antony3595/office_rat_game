@@ -1,13 +1,13 @@
 import Page from "@/components/views/Page.tsx";
 import { useActiveGameQuestionLoader, useActiveJoinedGameLoader } from "@/redux/game/loader.ts";
-import { Lock } from "lucide-react";
+import { ChartBarBig, Lock } from "lucide-react";
 import "./user_games.css";
 import Typer from "@/components/ui/Typer/typer.tsx";
 import strings from "@/constants/strings.ts";
 import { useParams } from "react-router-dom";
-import { type AnswerResponse, ResponseStatusEnum, UserGameStatusEnum } from "@/api/schema/game.ts";
+import { type AnswerResponse, ResponseStatusEnum, type UserGameScores, UserGameStatusEnum } from "@/api/schema/game.ts";
 import { Button } from "@/components/ui/button.tsx";
-import { type ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/hooks.ts";
 import { createErrorSelector } from "@/redux/actionsErrors/selectors.ts";
 import { Input } from "@/components/ui/input.tsx";
@@ -18,42 +18,57 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator.tsx";
 import { formatSeconds } from "@/redux/utils/datetimeUtils.ts";
 import ratImg from "@/assets/rat.jpg";
+import { useToken } from "@/redux/auth/loader.ts";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet.tsx";
+import GameScores from "@/components/views/UserGames/GameScores.tsx";
+import { clsx } from "clsx";
+import { useTimeCounter } from "@/hooks/useTimeCounter.ts";
+import { isNumber } from "@/utils/typeguards.ts";
+import config from "@/config/config.ts";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+
 const UserGameView = () => {
 	const { game_uuid } = useParams();
+	const token = useToken();
+	const { lastMessage, readyState } = useWebSocket(`${config.WS_URL}ws/${game_uuid}/scores?token=${token}`, {
+		shouldReconnect: () => true,
+	});
+
 	const [isGameLoading, game, updateGame] = useActiveJoinedGameLoader(game_uuid!);
 	const [isQuestionLoading, question, loadQuestion] = useActiveGameQuestionLoader(game_uuid!);
 	const gameLoadingError = useAppSelector(createErrorSelector("activeJoinedGame"));
-
 	const [answerInput, setAnswerInput] = useState<string>("");
 	const [isAnswerLoading, setAnswerLoading] = useState<boolean>(false);
 
-	const [gameDurationCounter, setGameDurationCounter] = useState(game?.game_duration || null);
-	const interval = useRef<NodeJS.Timeout | null>(null);
+	const [gameScores, setGameScores] = useState<UserGameScores[]>([]);
+	const [isScoresTriggerAnimated, setScoresTriggerAnimated] = useState<boolean>(false);
 
-	const clearGameDurationInterval = () => {
-		if (interval.current) {
-			clearInterval(interval.current);
-		}
+	const gameDuration = useTimeCounter(
+		isNumber(game?.game_duration) ? game?.game_duration : null,
+		Boolean(game?.status == UserGameStatusEnum.WIN && game?.game_duration)
+	);
+
+	const pingScoresTrigger = () => {
+		setScoresTriggerAnimated(true);
+
+		setTimeout(() => {
+			setScoresTriggerAnimated(false);
+		}, 1000);
 	};
 
 	useEffect(() => {
-		setGameDurationCounter(game?.game_duration || null);
-	}, [game?.game_duration]);
+		if (lastMessage?.data) {
+			const parsed_message: { data: UserGameScores[] } = JSON.parse(lastMessage.data);
+			setGameScores(parsed_message.data);
+			pingScoresTrigger();
+		}
+	}, [lastMessage]);
 
 	useEffect(() => {
-		if (gameDurationCounter !== null && game?.status == UserGameStatusEnum.IN_PROGRESS && game?.game_duration) {
-			clearGameDurationInterval();
-
-			interval.current = setInterval(() => {
-				setGameDurationCounter((gameDurationCounter || 0) + 1);
-			}, 1000);
-		} else if (game?.status == UserGameStatusEnum.WIN && game?.game_duration) {
-			clearGameDurationInterval();
-			setGameDurationCounter(game?.game_duration);
+		if (readyState === ReadyState.OPEN) {
+			pingScoresTrigger();
 		}
-
-		return clearGameDurationInterval;
-	}, [game?.status, game?.game_duration, gameDurationCounter]);
+	}, [readyState]);
 
 	const nextQuestion = useCallback(async () => {
 		await loadQuestion();
@@ -117,11 +132,47 @@ const UserGameView = () => {
 				{game && (
 					<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
 						<div className="flex place-content-between gap-2">
-							<div className={"flex-grow-2"}>{game.game.name || game.game.uuid}</div>
+							<div className={"flex flex-grow-2 items-center "}>
+								<span>{game.game.name || game.game.uuid}</span>
+								<div className={"ml-2"} onClick={pingScoresTrigger}>
+									<Lock size={18} />
+								</div>
+							</div>
 							<div className={"flex-grow-1 flex justify-end"}>
 								{!game.game.is_public && (
-									<div>
-										<Lock />
+									<div className={"flex"}>
+										<Sheet>
+											<div>
+												<span className="flex relative">
+													<SheetTrigger asChild>
+														<Button
+															disabled={readyState !== ReadyState.OPEN}
+															size={"icon"}
+															variant="outline"
+															className={"rounded-full bg-muted"}
+														>
+															<ChartBarBig />
+														</Button>
+													</SheetTrigger>
+													<span
+														className={clsx(
+															"absolute inline-flex h-full w-full rounded-full bg-slate-500 opacity-75",
+															{
+																"animate-ping": isScoresTriggerAnimated,
+																invisible: !isScoresTriggerAnimated,
+															}
+														)}
+													/>
+												</span>
+											</div>
+											<SheetContent>
+												<SheetHeader>
+													<SheetTitle>{strings.statistics}</SheetTitle>
+													<SheetDescription>{strings.statistics_descr}</SheetDescription>
+												</SheetHeader>
+												<GameScores gameScores={gameScores} />
+											</SheetContent>
+										</Sheet>
 									</div>
 								)}
 							</div>
@@ -150,7 +201,7 @@ const UserGameView = () => {
 								<div className="text-sm">{strings.game_duration}</div>
 								<div className="flex-grow border border-dashed border-t-0 border-l-0 border-r-0"></div>
 								<div key={game.status} style={{ animationDelay: "1000ms" }} className={"slide-in-right text-xs"}>
-									{gameDurationCounter ? formatSeconds(gameDurationCounter) : "..."}
+									{gameDuration !== null ? formatSeconds(gameDuration) : "..."}
 								</div>
 							</div>
 						</div>
@@ -167,11 +218,21 @@ const UserGameView = () => {
 				{question && (
 					<div
 						key={question.id}
-						className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted h-full flex flex-col"}
+						className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted h-full min-h-30 flex flex-col"}
 					>
 						<div>
 							<Typer dataText={[question.question]} permanent typingSpeed={50} />
 						</div>
+
+						{question.images && (
+							<div className={"flex gap-2 flex-wrap justify-start my-4"}>
+								{question.images.map((image) => (
+									<div key={image.image_url} className={"border rounded-sm flex-grow-0"}>
+										<img src={image.image_url} alt="" />
+									</div>
+								))}
+							</div>
+						)}
 						<div className="mt-auto">
 							<div className="flex w-full items-center gap-2">
 								<Input
