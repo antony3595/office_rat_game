@@ -23,7 +23,7 @@ const AchievementsView = () => {
 						<div className="my-auto w-full">
 							<div className={"slide-in-right rounded border p-2 [&:not(:first-child)]:mt-4 bg-muted"}>
 								<div>
-									<Typer dataText={[strings.no_achievements]} permanent />
+									<Typer dataText={[strings.no_achievements]} typingSpeed={40} permanent />
 								</div>
 							</div>
 						</div>
