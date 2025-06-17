@@ -1,7 +1,7 @@
 import React from "react";
 import "./typer.css";
 import { clsx } from "clsx";
-const TYPING_SPEED = 150;
+const TYPING_SPEED = 100;
 const DELETING_SPEED = 30;
 
 export interface TyperProps {
