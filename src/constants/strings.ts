@@ -43,6 +43,7 @@ const strings = {
 	achievements: "Ачивки",
 	achievements_loading: "Загрузка ачивок...",
 	no_achievements: "У вас нет ачивок. Все еще впереди",
+	hidden_functions_enabled: "Скрытые возможности доступны",
 };
 
 export default strings;

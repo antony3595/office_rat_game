@@ -13,12 +13,30 @@ import { ACHIEVEMENTS, GAMES, HOME } from "@/urls.ts";
 import strings from "@/constants/strings.ts";
 import { useAppDispatch } from "@/redux/hooks.ts";
 import { logout } from "@/redux/commonActions.ts";
+import { useState } from "react";
+import { Button } from "@/components/ui/button.tsx";
+import { toast } from "sonner";
 
 const Header = () => {
 	const [, currentUser] = useCurrentUserLoader();
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+	const [developerModeClicks, setDeveloperModeClicks] = useState<number>(0);
+	const [isDeveloperModeEnabled, setDeveloperModeEnabled] = useState(false);
 
+	const incrementDeveloperCounter = () => {
+		setDeveloperModeClicks(developerModeClicks + 1);
+		if (developerModeClicks === 1) {
+			setTimeout(() => {
+				setDeveloperModeClicks(0);
+			}, 3000);
+		}
+		if (developerModeClicks > 5) {
+			setDeveloperModeEnabled(true);
+			setDeveloperModeClicks(0);
+			toast(strings.hidden_functions_enabled);
+		}
+	};
 	return (
 		<div className="min-h-full">
 			<nav className="bg-muted">
@@ -34,8 +52,10 @@ const Header = () => {
 										</Avatar>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent>
-										<DropdownMenuLabel>
-											{currentUser.username ? `@${currentUser.username}` : "My Account"}
+										<DropdownMenuLabel asChild>
+											<Button variant="ghost" onClick={incrementDeveloperCounter}>
+												{currentUser.username ? `@${currentUser.username}` : "My Account"}
+											</Button>
 										</DropdownMenuLabel>
 										<DropdownMenuSeparator />
 										<DropdownMenuItem
@@ -59,20 +79,24 @@ const Header = () => {
 										>
 											{strings.achievements}
 										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={() => {
-												dispatch(logout());
-											}}
-										>
-											{strings.relogin}
-										</DropdownMenuItem>
-										<DropdownMenuItem
-											onClick={() => {
-												navigate("/404");
-											}}
-										>
-											404
-										</DropdownMenuItem>
+										{isDeveloperModeEnabled && (
+											<>
+												<DropdownMenuItem
+													onClick={() => {
+														dispatch(logout());
+													}}
+												>
+													{strings.relogin}
+												</DropdownMenuItem>
+												<DropdownMenuItem
+													onClick={() => {
+														navigate("/404");
+													}}
+												>
+													404
+												</DropdownMenuItem>
+											</>
+										)}
 									</DropdownMenuContent>
 								</DropdownMenu>
 							</div>

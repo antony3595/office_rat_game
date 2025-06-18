@@ -12,7 +12,7 @@ const AchievementsView = () => {
 				<div className={"w-full flex flex-col"}>
 					<div className={"flex flex-col gap-2"}>
 						{achievements.map((achievement) => (
-							<div className={"border rounded-sm  flex flex-row relative"}>
+							<div key={achievement.code} className={"border rounded-sm  flex flex-row relative"}>
 								<Badge
 									key={achievement.id}
 									className="h-5 min-w-5 rounded-full px-1 absolute"
