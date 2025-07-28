@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,13 +23,42 @@ jobs:
         env:
           VITE_APP_BUILD_TYPE: "production"
         run: npm run build
-
-      - name: Deploy with Rsync over SSH
-        uses: appleboy/ssh-action@master
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            scp -r -o StrictHostKeyChecking=no ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/office_rat_web/
+            name: production-files
+            path: ./dist
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    environment:
+      name: Production
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: production-files
+          path: ./dist
+      - name: Create SSH directory
+        run: mkdir -p ~/.ssh
+
+      - name: Add SSH known hosts
+        run: ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Set SSH permissions
+        run: chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy Docker container via SSH
+        uses: appleboy/ssh-action@v1.0.0
+
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v1
+        with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: 22
+            source: "./dist/"
+            target: /var/www/html/office_rat_web/
