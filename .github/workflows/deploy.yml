@@ -32,7 +32,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            rsync -avz --delete \
-              --exclude 'node_modules' \
-              --exclude '.git' \
-              ./dist/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/office_rat_web/
+            scp -r -o StrictHostKeyChecking=no ./dist/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/office_rat_web/
