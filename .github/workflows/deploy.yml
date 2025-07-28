@@ -50,9 +50,6 @@ jobs:
       - name: Set SSH permissions
         run: chmod 600 ~/.ssh/known_hosts
 
-      - name: Deploy Docker container via SSH
-        uses: appleboy/ssh-action@v1.0.0
-
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
         with:
