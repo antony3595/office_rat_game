@@ -21,7 +21,7 @@ const buildTypeConfigs: BuildTypesScheme = {
 		API_URL: "http://127.0.0.1:8000/",
 	},
 	[BuildTypeEnum.PRODUCTION]: {
-		API_URL: "https://unknown.kg/",
+		API_URL: "https://office-rat-game.kyrgyzstan.kg/api/",
 		BUILD_TYPE: BuildTypeEnum.PRODUCTION,
 	},
 	[BuildTypeEnum.MOCK]: {
