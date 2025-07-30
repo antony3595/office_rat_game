@@ -1,6 +1,6 @@
 import Page from "@/components/views/Page.tsx";
 import { useActiveGameQuestionLoader, useActiveJoinedGameLoader } from "@/redux/game/loader.ts";
-import { ChartBarBig, Lock } from "lucide-react";
+import { ChartBar, Lock } from "lucide-react";
 import "./user_games.css";
 import Typer from "@/components/ui/Typer/typer.tsx";
 import strings from "@/constants/strings.ts";
@@ -26,6 +26,8 @@ import { useTimeCounter } from "@/hooks/useTimeCounter.ts";
 import { isNumber } from "@/utils/typeguards.ts";
 import config from "@/config/config.ts";
 import useWebSocket, { ReadyState } from "react-use-websocket";
+
+const CONNECTED_WS_COLOR: string = "#06933c";
 
 const UserGameView = () => {
 	const { game_uuid } = useParams();
@@ -149,9 +151,10 @@ const UserGameView = () => {
 															disabled={readyState !== ReadyState.OPEN}
 															size={"icon"}
 															variant="outline"
+															style={{ borderColor: readyState === ReadyState.OPEN ? CONNECTED_WS_COLOR : undefined }}
 															className={"rounded-full bg-muted"}
 														>
-															<ChartBarBig />
+															<ChartBar color={readyState === ReadyState.OPEN ? CONNECTED_WS_COLOR : undefined} />
 														</Button>
 													</SheetTrigger>
 													<span
