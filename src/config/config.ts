@@ -22,7 +22,7 @@ const buildTypeConfigs: BuildTypesScheme = {
 	},
 	[BuildTypeEnum.PRODUCTION]: {
 		API_URL: "https://office-rat-game.kyrgyzstan.kg/api/",
-		WS_URL: "wss://office-rat-game.kyrgyzstan.kg/api/",
+		WS_URL: "wss://office-rat-game.kyrgyzstan.kg",
 		BUILD_TYPE: BuildTypeEnum.PRODUCTION,
 	},
 	[BuildTypeEnum.MOCK]: {
